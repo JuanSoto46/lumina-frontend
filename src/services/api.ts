@@ -26,5 +26,19 @@ export const api = {
   forgot: (email: string) => http("/api/auth/forgot", { method: "POST", body: JSON.stringify({ email }) }),
   reset: (email: string, token: string, newPassword: string) =>
     http("/api/auth/reset", { method: "POST", body: JSON.stringify({ email, token, newPassword }) }),
-  logout: () => { localStorage.removeItem("token"); return { ok: true }; }
+  logout: () => { localStorage.removeItem("token"); return { ok: true }; },
+  
+  // Pexels API endpoints que coinciden con tu backend
+  pexels: {
+    getPopularVideos: () => http("/api/pexels/videos/popular"),
+      searchVideos: (query?: string, terms?: string, per_page: number = 20) => {
+      const params = new URLSearchParams();
+      if (query) params.append('query', query);
+      if (terms) params.append('terms', terms);
+      params.append('per_page', per_page.toString());
+      return http(`/api/pexels/videos/search?${params.toString()}`);
+    },
+    getVideoById: (id: string | number) => http(`/api/pexels/videos/${id}`),
+    healthCheck: () => http("/api/pexels/")
+  }
 };
