@@ -41,7 +41,7 @@ export default function Login({ onAuth }: Props) {
       await api.login(email, password);
       onAuth?.();
       setMsg("Inicio de sesión exitoso.");
-      navigate("/profile");
+      navigate("/pexels");
     } catch (e: any) {
       setMsg(e.message || "Error al iniciar sesión.");
     }

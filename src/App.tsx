@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
+import Pexels from "./pages/Pexels";
 import Footer from "./components/Footer";
 import { api } from "./services/api";
 
@@ -47,8 +48,9 @@ export default function App() {
             <span>Lumina</span>
           </div>
           <ul>
-            <li><Link to="/">Home</Link></li>
+            {!authed && <li><Link to="/">Home</Link></li>}
             <li><Link to="/about">About</Link></li>
+            {authed && <li><Link to="/pexels">Videos</Link></li>}
             {!authed && (
               <>
                 <li><Link to="/login">Login</Link></li>
@@ -69,6 +71,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/pexels" element={<Pexels />} />
           <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
