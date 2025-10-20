@@ -25,7 +25,7 @@ export default function About() {
         <section className="about-logo-section" aria-labelledby="lumina-info">
           <div className="about-logo">
             <img
-              src="../public/Lumina.png"
+              src="/Lumina.png"
               alt="Logotipo de Lumina, plataforma de streaming"
               className="about-logo-image"
             />
