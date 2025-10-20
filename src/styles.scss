@@ -16,15 +16,17 @@ body {
 }
 
 // Prevent scrolling on login page
+/* ✅ Login/Reset deben poder hacer scroll en móvil */
 body.login-page {
-  overflow: hidden;
-  height: 100vh;
+  overflow: auto;          /* permite scroll */
+  min-height: 100vh;       
+}
+
+/* Puedes reducir padding del main si te molesta el espacio extra */
+body.login-page main.container {
+  padding: 12px;
+  max-width: 600px;
   
-  // Remove container padding on login page
-  main.container {
-    padding: 0;
-    max-width: none;
-  }
 }
 .container {
   max-width: 980px;
@@ -1304,3 +1306,25 @@ body.login-page .login-container {
     }
   }
 }
+
+/* Helpers responsive para navbar */
+.hidden-md { display: flex; }
+.show-md { display: none; }
+
+@media (max-width: 768px) {
+  .hidden-md { display: none; }
+  .show-md { display: inline-flex; }
+}
+
+/* Ajustes al header y menú móvil */
+.nav { 
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  position: sticky; top:0; backdrop-filter: blur(6px);
+  padding: 8px 0;
+}
+.nav .nav-inner { display:flex; align-items:center; justify-content:space-between; }
+.nav-items ul, .mobile-menu ul { list-style:none; padding:0; margin:0; display:flex; gap:8px; align-items:center; }
+.mobile-menu { border-top:1px solid rgba(255,255,255,.1); background:#0b0f14; }
+.mobile-menu ul { flex-direction:column; align-items:stretch; }
+.linklike { background:none; border:none; color:#9bb0ff; cursor:pointer; padding:8px 12px; }

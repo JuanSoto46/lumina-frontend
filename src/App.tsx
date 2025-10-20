@@ -1,7 +1,7 @@
 /* The code you provided is importing various modules and components needed for a React application.
 Here is a breakdown of each import statement: */
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -11,6 +11,8 @@ import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
 import Pexels from "./pages/Pexels";
 import Footer from "./components/Footer";
+import Header from "./components/Header";                
+import ChangePassword from "./pages/ChangePassword";
 import { api } from "./services/api";
 
 /**
@@ -40,46 +42,22 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
-      <header className="nav">
-        <nav className="container">
-          <div className="nav-logo">
-            <img src="/play-barra.png" alt="Lumina" className="nav-logo-image" />
-            <span>Lumina</span>
-          </div>
-          <ul>
-            {!authed && <li><Link to="/">Inicio</Link></li>}
-            <li><Link to="/about">Sobre nosotros</Link></li>
-            {authed && <li><Link to="/pexels">Videos</Link></li>}
-            {!authed && (
-              <>
-                <li><Link to="/login">Inicia sesión</Link></li>
-                <li><Link to="/signup">Crea una cuenta</Link></li>
-              </>
-            )}
-            {authed && (
-              <>
-                <li><Link to="/profile">Perfil</Link></li>
-                <li><Link to="#" onClick={logout}>Cerrar sesión</Link></li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </header>
-
+      <BrowserRouter>
+      <Header authed={authed} onLogout={logout} />
       <main className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/pexels" element={<Pexels />} />
+          {authed && <Route path="/pexels" element={<Pexels />} />}
           <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
+          {authed && <Route path="/profile" element={<Profile />} />}
           <Route path="/forgot" element={<Forgot />} />
           <Route path="/reset" element={<Reset />} />
+          {authed && <Route path="/settings/password" element={<ChangePassword />} />}
+          <Route path="*" element={<div>Página no encontrada</div>} />
         </Routes>
       </main>
-
       <Footer />
     </BrowserRouter>
   );
