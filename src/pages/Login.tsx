@@ -17,6 +17,7 @@ export default function Login({ onAuth }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
+  const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
   const navigate = useNavigate();
 
   async function onSubmit(e: React.FormEvent) {
@@ -25,9 +26,11 @@ export default function Login({ onAuth }: Props) {
       await api.login(email, password);
       onAuth?.();
       setMsg("Inicio de sesión exitoso.");
+      setMsgType("success");
       navigate("/pexels");
     } catch (e: any) {
       setMsg(e.message || "Error al iniciar sesión.");
+      setMsgType("error");
     }
   }
 
@@ -80,7 +83,7 @@ export default function Login({ onAuth }: Props) {
           </div>
 
           <button type="submit" className="login-button" aria-label="Ingresar a tu cuenta">
-            Ingresar
+            INGRESAR
           </button>
         </form>
 
@@ -93,7 +96,7 @@ export default function Login({ onAuth }: Props) {
         </nav>
 
         {msg && (
-          <p role="status" aria-live="polite" className="login-message">
+          <p role="status" aria-live="polite" className={`login-message ${msgType}`}>
             {msg}
           </p>
         )}

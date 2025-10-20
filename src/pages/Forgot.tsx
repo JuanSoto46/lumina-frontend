@@ -8,6 +8,7 @@ import { api } from "../services/api";
 export default function Forgot() {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
 
   useEffect(() => {
     document.body.classList.add("login-page");
@@ -19,8 +20,10 @@ export default function Forgot() {
     try {
       await api.forgot(email);
       setMsg("Si el correo existe, se ha enviado un enlace de recuperación.");
+      setMsgType("success");
     } catch (e: any) {
       setMsg(e.message || "Error al enviar el enlace.");
+      setMsgType("error");
     }
   }
 
@@ -58,7 +61,7 @@ export default function Forgot() {
           </p>
         </div>
 
-        {msg && <p role="status" className="login-message">{msg}</p>}
+        {msg && <p role="status" className={`login-message ${msgType}`}>{msg}</p>}
       </div>
     </div>
   );

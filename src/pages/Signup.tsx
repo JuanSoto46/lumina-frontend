@@ -19,12 +19,13 @@ export default function Signup() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
-    age: 18,
+    age: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
   const [msg, setMsg] = useState("");
+  const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
 
   /* The `useEffect` hook in the provided code snippet is used to add a CSS class to the `body` element
   of the document when the `Signup` component mounts, and then remove that class when the component
@@ -58,21 +59,29 @@ export default function Signup() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (form.age < 18) {
-      setMsg("You must be at least 18 years old to register.");
+    if (Number(form.age) < 18 || isNaN(Number(form.age))) {
+      setMsg("Debes tener al menos 18 años para registrarte.");
+      setMsgType("error");
       return;
     }
 
     if (form.password !== form.confirmPassword) {
-      setMsg("The passwords do not match.");
+      setMsg("Las contraseñas no coinciden.");
+      setMsgType("error");
       return;
     }
 
     try {
-      await api.signup(form);
-      setMsg("Account created. You can login now.");
+      const formData = {
+        ...form,
+        age: Number(form.age) // Convertir age a número para la API
+      };
+      await api.signup(formData);
+      setMsg("Cuenta creada. Ahora puedes iniciar sesión.");
+      setMsgType("success");
     } catch (e: any) {
       setMsg(e.message || "Error al crear la cuenta.");
+      setMsgType("error");
     }
   }
 
@@ -127,10 +136,16 @@ export default function Signup() {
               <input
                 id="age"
                 type="number"
-                min={0}
+                min={18}
                 value={form.age}
-                onChange={(e) => set("age", Number(e.target.value))}
-                placeholder="Edad"
+                onChange={(e) => set("age", e.target.value)}
+                onFocus={(e) => {
+                  // Si el campo está vacío o es "0", limpiar al hacer foco
+                  if (form.age === "" || form.age === "0") {
+                    set("age", "");
+                  }
+                }}
+                placeholder="Edad (mínimo 18 años)"
                 required
                 aria-required="true"
                 className="login-input"
@@ -193,7 +208,7 @@ export default function Signup() {
         </nav>
 
         {msg && (
-          <p id="signup-status" role="status" className="login-message">
+          <p id="signup-status" role="status" className={`login-message ${msgType}`}>
             {msg}
           </p>
         )}
