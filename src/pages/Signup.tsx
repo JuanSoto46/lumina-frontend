@@ -19,12 +19,32 @@ export default function Signup() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
-    age: 18,
+    age: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
   const [msg, setMsg] = useState("");
+
+  function validatePasswordStrength(password: string): string | null {
+    if (password.length < 8) {
+      return "The password must have at least 8 characters.";
+    }
+    const weakPasswords = [
+      "123456", "password", "qwerty", "abc123",
+      "12345678", "123456789", "111111", "password1",
+      "123123", "contraseña"
+    ];
+    if (weakPasswords.includes(password.toLowerCase())) {
+      return "The password is too common. Please choose another one.";
+    }
+    const strongRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]|;:"<>,.?/~`]).+$/;
+    if (!strongRegex.test(password)) {
+      return "The password must include at least one uppercase letter, one number, and one symbol.";
+    }
+    return null;
+  }
+
 
   /* The `useEffect` hook in the provided code snippet is used to add a CSS class to the `body` element
   of the document when the `Signup` component mounts, and then remove that class when the component
@@ -57,14 +77,27 @@ export default function Signup() {
    */
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const ageNum = Number(form.age);
 
-    if (form.age < 18) {
+    if (!form.age || isNaN(ageNum)) {
+      setMsg("Please enter your age.");
+      return;
+    }
+
+    if (ageNum < 18) {
       setMsg("You must be at least 18 years old to register.");
       return;
     }
 
+
     if (form.password !== form.confirmPassword) {
       setMsg("The passwords do not match.");
+      return;
+    }
+
+    const err = validatePasswordStrength(form.password);
+    if (err) {
+      setMsg(err);
       return;
     }
 
@@ -129,7 +162,7 @@ export default function Signup() {
                 type="number"
                 min={0}
                 value={form.age}
-                onChange={(e) => set("age", Number(e.target.value))}
+                onChange={(e) => set("age", e.target.value)}
                 placeholder="Edad"
                 required
                 aria-required="true"

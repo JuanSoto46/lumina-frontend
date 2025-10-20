@@ -1328,3 +1328,55 @@ body.login-page .login-container {
 .mobile-menu { border-top:1px solid rgba(255,255,255,.1); background:#0b0f14; }
 .mobile-menu ul { flex-direction:column; align-items:stretch; }
 .linklike { background:none; border:none; color:#9bb0ff; cursor:pointer; padding:8px 12px; }
+
+
+/* === Profile Page Styles === */
+.profile-page {
+  min-height: 100vh;              /* Ocupa toda la altura de la pantalla */
+  display: flex;                  /* Usa flexbox para centrar */
+  align-items: center;            /* Centrado vertical */
+  justify-content: center;        /* Centrado horizontal */
+  background: $bg;                /* Fondo igual al del resto del sitio */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  h2 {
+    margin-bottom: 20px;
+    color: $text;
+  }
+
+  .profile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .profile-message {
+    margin-top: 20px;
+    color: $muted;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 25px;
+  }
+}
