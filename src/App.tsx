@@ -48,19 +48,19 @@ export default function App() {
             <span>Lumina</span>
           </div>
           <ul>
-            {!authed && <li><Link to="/">Home</Link></li>}
-            <li><Link to="/about">About</Link></li>
+            {!authed && <li><Link to="/">Inicio</Link></li>}
+            <li><Link to="/about">Sobre nosotros</Link></li>
             {authed && <li><Link to="/pexels">Videos</Link></li>}
             {!authed && (
               <>
-                <li><Link to="/login">Login</Link></li>
-                <li><Link to="/signup">Sign up</Link></li>
+                <li><Link to="/login">Inicia sesión</Link></li>
+                <li><Link to="/signup">Crea una cuenta</Link></li>
               </>
             )}
             {authed && (
               <>
-                <li><Link to="/profile">Profile</Link></li>
-                <li><Link to="#" onClick={logout}>Logout</Link></li>
+                <li><Link to="/profile">Perfil</Link></li>
+                <li><Link to="#" onClick={logout}>Cerrar sesión</Link></li>
               </>
             )}
           </ul>

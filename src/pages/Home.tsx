@@ -13,9 +13,9 @@ export default function Home() {
       aria-labelledby="home-title"
       lang="en"
     >
-      <h2 id="home-title">Welcome to Lumina</h2>
+      <h2 id="home-title">Bienvenido a Lumina</h2>
       <p>
-        Streamlined movie platform prototype. Sprint 1 focuses on user management.
+         Plataforma de películas .
       </p>
     </section>
   );
