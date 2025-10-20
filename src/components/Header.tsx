@@ -32,7 +32,7 @@ export default function Header({ authed, onLogout }: Props) {
         {/* Desktop */}
         <div className="nav-items hidden-md">
           <ul>
-            <li><Item to="/">Inicio</Item></li>
+            {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
             {!authed && (
@@ -44,7 +44,6 @@ export default function Header({ authed, onLogout }: Props) {
             {authed && (
               <>
                 <li><Item to="/profile">Perfil</Item></li>
-                <li><Item to="/settings/password">Cambiar contraseña</Item></li>
                 <li><button className="linklike" onClick={onLogout}>Cerrar sesión</button></li>
               </>
             )}
@@ -63,7 +62,7 @@ export default function Header({ authed, onLogout }: Props) {
       {open && (
         <div className="mobile-menu show-md">
           <ul onClick={() => setOpen(false)}>
-            <li><Item to="/">Inicio</Item></li>
+            {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
             {!authed && (
@@ -75,7 +74,6 @@ export default function Header({ authed, onLogout }: Props) {
             {authed && (
               <>
                 <li><Item to="/profile">Perfil</Item></li>
-                <li><Item to="/settings/password">Cambiar contraseña</Item></li>
                 <li><button className="linklike" onClick={onLogout}>Cerrar sesión</button></li>
               </>
             )}

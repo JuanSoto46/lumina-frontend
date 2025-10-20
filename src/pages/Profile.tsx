@@ -3,6 +3,7 @@
 modules from the React library. Specifically, it is importing the `useEffect` and `useState` hooks
 from React, which are essential for managing side effects and state in functional components. */
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 
 /**
@@ -19,6 +20,7 @@ export default function Profile() {
   state within a functional component. */
   const [me, setMe] = useState<any>(null);
   const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
 
   /**
    * The function `load` asynchronously fetches user data from an API and sets the retrieved data to
@@ -135,6 +137,13 @@ export default function Profile() {
           <div className="profile-buttons" role="group" aria-label="Acciones de perfil">
             <button type="button" className="btn-primary" onClick={save}>
               Guardar
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate('/settings/password')}
+            >
+              Cambiar contraseña
             </button>
             <button
               type="button"
