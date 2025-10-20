@@ -1,6 +1,6 @@
 // Minimal responsive layout + accessible colors
 $primary: #2e5bff;
-$bg: #0b0f14;
+$bg: linear-gradient(135deg, #1a2332 0%, #2d4a5a 50%, #1a2332 100%);
 $text: #e6e6e6;
 $muted: #aab0b8;
 
@@ -11,22 +11,31 @@ $muted: #aab0b8;
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;
-  background: $bg;
+  background: linear-gradient(135deg, #1a2332 0%, #2d4a5a 50%, #1a2332 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
   color: $text;
+  padding-top: 76px; /* Espacio para el navbar fijo en todas las páginas */
 }
 
-// Prevent scrolling on login page
-/* ✅ Login/Reset deben poder hacer scroll en móvil */
+
 body.login-page {
-  overflow: auto;          /* permite scroll */
-  min-height: 100vh;       
+  overflow: auto;        
+  min-height: 100vh;     
+  
+  /* Ocultar scrollbar pero permitir scroll */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+  
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+  }
 }
 
-/* Puedes reducir padding del main si te molesta el espacio extra */
+
 body.login-page main.container {
-  padding: 12px;
-  max-width: 600px;
-  
+  padding: 0;
+  max-width: none;
 }
 .container {
   max-width: 980px;
@@ -36,8 +45,18 @@ body.login-page main.container {
 .nav {
   background: rgba(255,255,255,.04);
   border-bottom: 1px solid rgba(255,255,255,.08);
-  position: sticky; top:0; backdrop-filter: blur(6px);
+  position: fixed; 
+  top: 0; 
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
   padding: 8px 0;
+  transition: transform 0.1s ease-out;
+  
+  &.nav-hidden {
+    transform: translateY(-100%);
+  }
   
   .container {
     display: flex;
@@ -55,7 +74,7 @@ body.login-page main.container {
   span {
     font-size: 1.8rem;
     font-weight: bold;
-    color: $text;
+    color: #ffffff;
     margin: 0;
   }
 }
@@ -75,6 +94,13 @@ body.login-page main.container {
   li a {
     font-size: 0.875rem;
     padding: 4px 8px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
   }
 }
 a { color: $primary; text-decoration: none; }
@@ -95,36 +121,34 @@ footer {
   color: $muted;
 }
 
-// Login page specific styles
 .login-container {
-  height: 100vh;
+  min-height: calc(100vh - 76px);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #FFFFFF 0%);
+  background: linear-gradient(135deg, #1a2332 0%, #2d4a5a 50%, #1a2332 100%);
   padding: 20px;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
 }
 
-// Adjust login container when navigation is present
 body.login-page .login-container {
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 76px);
   padding-top: 0;
 }
 
 .login-card {
-  background: #C0CAD0;
-  backdrop-filter: blur(10px);
+  background: rgba(45, 74, 90, 0.3);
+  backdrop-filter: blur(20px);
   border-radius: 20px;
   padding: 40px;
   width: 100%;
   max-width: 400px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  max-height: 90vh;
-  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-height: none;
+  overflow: visible;
 }
 
 .login-logo {
@@ -134,7 +158,7 @@ body.login-page .login-container {
 .logo-circle {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -199,28 +223,29 @@ body.login-page .login-container {
 .login-input {
   width: 100%;
   padding: 15px 20px;
-  border: 2px solid #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   font-size: 16px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
+  background: rgba(20, 35, 45, 0.7);
+  color: #ffffff;
   transition: all 0.3s ease;
   box-sizing: border-box;
   
   &::placeholder {
-    color: #666;
+    color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
   }
   
   &:focus {
     outline: none;
-    border-color: #3949ab;
-    box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    background: rgba(20, 35, 45, 0.9);
   }
 }
 
 .login-button {
-  background: #8B0000;
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
   color: white;
   border: none;
   padding: 15px 30px;
@@ -231,10 +256,12 @@ body.login-page .login-container {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.3);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+    background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
   }
   
   &:active {
@@ -246,17 +273,17 @@ body.login-page .login-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .forgot-link {
-  color: #3949ab;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.3s ease;
   
   &:hover {
-    color: #1a237e;
+    color: #ffffff;
     text-decoration: underline;
   }
 }
@@ -264,29 +291,81 @@ body.login-page .login-container {
 .signup-text {
   margin: 0;
   font-size: 14px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .signup-link {
-  color: #3949ab;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
   
   &:hover {
-    color: #1a237e;
+    color: #ffffff;
     text-decoration: underline;
   }
 }
 
 .login-message {
   margin-top: 15px;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 8px;
-  background: rgba(76, 175, 80, 0.1);
-  color: #2e7d32;
-  border: 1px solid rgba(76, 175, 80, 0.3);
   font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  
+  &.success {
+    background: rgba(46, 204, 113, 0.15);
+    color: #27ae60;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.1);
+  }
+  
+  /* Mensaje de error (rojo) */
+  &.error {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+  }
+  
+  /* Mensaje por defecto (info - azul) */
+  &.info {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+  }
+}
+
+// Login page text styles
+.login-card {
+  h1, .label {
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  p.label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 25px;
+    line-height: 1.4;
+  }
+  
+  .input-group label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+  }
 }
 
 @media (max-width: 640px) {
@@ -306,12 +385,16 @@ body.login-page .login-container {
   }
   
   .login-card {
-    padding: 30px 20px;
+    padding: 20px 15px;
     margin: 10px;
+    max-height: none;
+    overflow: visible;
   }
   
   .signup-card {
-    padding: 25px 15px;
+    padding: 20px 15px;
+    max-height: none;
+    overflow: visible;
     
     .logo-circle {
       width: 60px;
@@ -346,8 +429,8 @@ body.login-page .login-container {
 
 // About page styles
 .about-page {
-  min-height: calc(100vh - 120px);
-  background: $bg;
+  min-height: calc(100vh - 76px);
+  background: transparent;
   color: $text;
 }
 
@@ -601,8 +684,8 @@ body.login-page .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 120px);
-  background: $bg;
+  min-height: calc(100vh - 76px);
+  background: transparent;
   padding: 40px 20px;
 }
 
@@ -708,7 +791,7 @@ body.login-page .login-container {
 
 .pexels-page {
   min-height: 100vh;
-  background: $bg;
+  background: transparent;
   
   .container {
     max-width: 1200px;
@@ -1320,11 +1403,24 @@ body.login-page .login-container {
 .nav { 
   background: rgba(255,255,255,.04);
   border-bottom: 1px solid rgba(255,255,255,.08);
-  position: sticky; top:0; backdrop-filter: blur(6px);
+  position: fixed; 
+  top: 0; 
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
   padding: 8px 0;
+  transition: transform 0.1s ease-out;
+  
+  &.nav-hidden {
+    transform: translateY(-100%);
+  }
 }
 .nav .nav-inner { display:flex; align-items:center; justify-content:space-between; }
 .nav-items ul, .mobile-menu ul { list-style:none; padding:0; margin:0; display:flex; gap:8px; align-items:center; }
+.nav-items a, .mobile-menu a { color: #ffffff; text-decoration: none; transition: color 0.3s ease; }
+.nav-items a:hover, .mobile-menu a:hover { color: rgba(255, 255, 255, 0.8); }
 .mobile-menu { border-top:1px solid rgba(255,255,255,.1); background:#0b0f14; }
 .mobile-menu ul { flex-direction:column; align-items:stretch; }
-.linklike { background:none; border:none; color:#9bb0ff; cursor:pointer; padding:8px 12px; }
+.linklike { background:none; border:none; color:#ffffff; cursor:pointer; padding:8px 12px; transition: color 0.3s ease; }
+.linklike:hover { color: rgba(255, 255, 255, 0.8); }
