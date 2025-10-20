@@ -1,29 +1,104 @@
-import React, { useState } from "react";
+// src/pages/Reset.tsx
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 
 export default function Reset() {
-  const [email, setEmail] = useState("");
-  const [token, setToken] = useState("");
+  const [sp] = useSearchParams();
+  const navigate = useNavigate();
+  const token = sp.get("token") || ""; // viene del link del correo
+
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [msg, setMsg] = useState("");
 
-  async function submit(e: React.FormEvent) {
+  // mantener tu clase de página si te gusta la decoración
+  useEffect(() => {
+    document.body.classList.add("login-page");
+    return () => { document.body.classList.remove("login-page"); };
+  }, []);
+
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!token) {
+      setMsg("Falta token. Abre el enlace desde tu correo nuevamente.");
+      return;
+    }
+    if (password.length < 6) {
+      setMsg("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+    if (password !== confirm) {
+      setMsg("Las contraseñas no coinciden.");
+      return;
+    }
     try {
-      await api.reset(email, token, password);
-      setMsg("Password changed. You can login.");
-    } catch (e: any) { setMsg(e.message); }
+      await api.reset(token, password, confirm); // api.reset(token, password, confirmPassword)
+      setMsg("Contraseña actualizada. Redirigiendo al inicio de sesión…");
+      setTimeout(() => navigate("/login"), 1200);
+    } catch (e: any) {
+      setMsg(e.message || "Error al restablecer.");
+    }
   }
+
   return (
-    <section>
-      <h2>Reset password</h2>
-      <form onSubmit={submit}>
-        <label>Correo<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required /></label>
-        <label>Token<input value={token} onChange={e=>setToken(e.target.value)} required /></label>
-        <label>Nueva contraseña<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required /></label>
-        <button type="submit">Change</button>
-      </form>
-      {msg && <p role="status">{msg}</p>}
-    </section>
+    <div className="login-container" role="main" aria-labelledby="reset-title" lang="es">
+      <div className="login-card">
+        <div className="login-logo">
+          <div className="logo-circle">
+            {/* En Vite, /public se sirve desde la raíz */}
+            <img src="/Lumina.png" alt="Logo de Lumina" className="logo-image" />
+          </div>
+        </div>
+
+        <h2 id="reset-title" className="label">Restablecer contraseña</h2>
+
+        <form onSubmit={onSubmit} className="login-form" aria-describedby="reset-status">
+          <div className="input-group">
+            <label htmlFor="password" className="label">Nueva contraseña</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Nueva contraseña"
+              required
+              className="login-input"
+              aria-required="true"
+            />
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="confirm" className="label">Confirmar contraseña</label>
+            <input
+              id="confirm"
+              type="password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              placeholder="Confirmar contraseña"
+              required
+              className="login-input"
+              aria-required="true"
+            />
+          </div>
+
+          <button type="submit" className="login-button">
+            Cambiar contraseña
+          </button>
+        </form>
+
+        <div className="login-links">
+          <p className="signup-text">
+            <a href="/login" className="signup-link">Volver al inicio</a>
+          </p>
+        </div>
+
+        {msg && (
+          <p id="reset-status" role="status" className="login-message">
+            {msg}
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

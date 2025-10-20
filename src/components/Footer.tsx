@@ -1,21 +1,20 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
     <footer>
       <div className="container">
-        <strong>Site map:</strong>
+        <strong>Mapa de sitio:</strong>
         <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/signup">Sign up</Link></li>
-          <li><Link to="/profile">Profile</Link></li>
-          <li><Link to="/forgot">Forgot</Link></li>
-          <li><Link to="/reset">Reset</Link></li>
+          <li><Link to="/">Inicio</Link></li>
+          <li><Link to="/about">Sobre nosotros</Link></li>
+          <li><Link to="/login">Inicia sesión</Link></li>
+          <li><Link to="/signup">Crea una cuenta</Link></li>
+          <li><Link to="/forgot">Recuperar contraseña</Link></li>
+          {/* Cambiar contraseña solo para autenticados, se muestra en el menú del header */}
         </ul>
-        <p>© 2025 Lumina. Accessible contrast, focus-visible, labeled forms.</p>
+        <p>© 2025 Lumina. Contraste accesible, enfoque visible, formularios etiquetados.</p>
       </div>
     </footer>
   );
