@@ -6,35 +6,19 @@
  * in this case. This event object is used to prevent the default form submission behavior using `
  */
 
+// src/pages/Login.tsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
 
 type Props = { onAuth?: () => void };
 
-/**
- * The function `Login` is a React component that handles user login functionality, including form
- * submission, error handling, and navigation.
- * @param e - The `e` parameter in the `onSubmit` function refers to the event object that is passed
- * when the form is submitted. This event object contains information about the event that occurred,
- * such as the target element (the form in this case) and any other relevant data related to the event.
- */
 export default function Login({ onAuth }: Props) {
-  /* The code snippet you provided is initializing state variables using the `useState` hook in a React
-  functional component. Here's what each line is doing: */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
-  /**
-   * The function onSubmit handles form submission in a TypeScript React component, attempting to log
-   * in with user credentials and displaying a success message or error message accordingly.
-   * @param e - The parameter `e` in the `onSubmit` function is a React.FormEvent object, which
-   * represents the event that occurs when a form is submitted. It is commonly used in React
-   * applications to handle form submissions and prevent the default form submission behavior using
-   * `e.preventDefault()`.
-   */
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
@@ -47,14 +31,9 @@ export default function Login({ onAuth }: Props) {
     }
   }
 
-  /* The `useEffect` hook in the provided code snippet is used to add and remove a CSS class to the
-  `body` element of the document when the `Login` component mounts and unmounts. Here's a breakdown
-  of what it does: */
   useEffect(() => {
     document.body.classList.add("login-page");
-    return () => {
-      document.body.classList.remove("login-page");
-    };
+    return () => document.body.classList.remove("login-page");
   }, []);
 
   return (
@@ -62,17 +41,11 @@ export default function Login({ onAuth }: Props) {
       <section className="login-card" aria-describedby="login-description">
         <div className="login-logo">
           <div className="logo-circle">
-            <img
-              src="/Lumina.png"
-              alt="Logo de Lumina"
-              className="logo-image"
-            />
+            <img src="/Lumina.png" alt="Logo de Lumina" className="logo-image" />
           </div>
         </div>
 
-        <h1 id="login-title" className="label">
-          Iniciar sesión en Lumina
-        </h1>
+        <h1 id="login-title" className="label">Iniciar sesión en Lumina</h1>
         <p id="login-description" className="label">
           Ingresa tu correo electrónico y contraseña para acceder a tu cuenta.
         </p>
@@ -112,14 +85,10 @@ export default function Login({ onAuth }: Props) {
         </form>
 
         <nav className="login-links" aria-label="Enlaces de ayuda">
-          <a href="/forgot" className="forgot-link">
-            ¿Olvidaste tu contraseña?
-          </a>
+          <Link to="/forgot" className="forgot-link">¿Olvidaste tu contraseña?</Link>
           <p className="signup-text">
             ¿No tienes una cuenta?{" "}
-            <a href="/signup" className="signup-link">
-              Regístrate aquí
-            </a>
+            <Link to="/signup" className="signup-link">Regístrate aquí</Link>
           </p>
         </nav>
 
