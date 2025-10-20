@@ -11,6 +11,7 @@ export default function Reset() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [msg, setMsg] = useState("");
+  const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
 
   // mantener tu clase de página si te gusta la decoración
   useEffect(() => {
@@ -23,11 +24,13 @@ export default function Reset() {
 
     if (!token) {
       setMsg("Falta token. Abre el enlace desde tu correo nuevamente.");
+      setMsgType("error");
       return;
     }
 
     if (password.length < 6) {
       setMsg("La contraseña debe tener al menos 6 caracteres.");
+      setMsgType("error");
       return;
     }
 
@@ -40,15 +43,18 @@ export default function Reset() {
 
     if (password !== confirm) {
       setMsg("Las contraseñas no coinciden.");
+      setMsgType("error");
       return;
     }
 
     try {
       await api.reset(token, password, confirm); // api.reset(token, password, confirmPassword)
       setMsg("Contraseña actualizada. Redirigiendo al inicio de sesión…");
+      setMsgType("success");
       setTimeout(() => navigate("/login"), 1200);
     } catch (e: any) {
       setMsg(e.message || "Error al restablecer.");
+      setMsgType("error");
     }
   }
 
@@ -105,7 +111,7 @@ export default function Reset() {
         </div>
 
         {msg && (
-          <p id="reset-status" role="status" className="login-message">
+          <p id="reset-status" role="status" className={`login-message ${msgType}`}>
             {msg}
           </p>
         )}
