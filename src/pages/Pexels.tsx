@@ -95,6 +95,7 @@ const Pexels: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('nature');
   const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -234,6 +235,33 @@ const Pexels: React.FC = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  /**
+   * Toggles the like status of a video
+   * @param {number} videoId - The ID of the video to toggle
+   * @param {React.MouseEvent} e - The click event
+   */
+  const toggleLike = (videoId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLikedVideos(prev => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(videoId)) {
+        newLiked.delete(videoId);
+      } else {
+        newLiked.add(videoId);
+      }
+      return newLiked;
+    });
+  };
+
+  /**
+   * Checks if a video is liked
+   * @param {number} videoId - The ID of the video to check
+   * @returns {boolean} True if the video is liked
+   */
+  const isLiked = (videoId: number) => {
+    return likedVideos.has(videoId);
+  };
+
   return (
     <div className="pexels-page">
       <div className="container">
@@ -314,8 +342,13 @@ const Pexels: React.FC = () => {
                   </div>
                 </div>
                 <div className="info-right">
-                  <button className="icon-btn" onClick={(e) => { e.stopPropagation(); /* like functionality */ }} aria-label="like">♡</button>
-                  <button className="icon-btn" onClick={(e) => { e.stopPropagation(); openVideoModal(video); }} aria-label="play">▶</button>
+                  <button 
+                    className={`simple-heart ${isLiked(video.id) ? 'liked' : ''}`}
+                    onClick={(e) => toggleLike(video.id, e)}
+                    aria-label={isLiked(video.id) ? 'Quitar me gusta' : 'Me gusta'}
+                  >
+                    {isLiked(video.id) ? '❤️' : '🤍'}
+                  </button>
                 </div>
               </div>
             </div>

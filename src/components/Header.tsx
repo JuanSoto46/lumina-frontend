@@ -35,6 +35,7 @@ export default function Header({ authed, onLogout }: Props) {
             {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
+            {authed && <li><Item to="/favorites">Favoritos</Item></li>}
             {!authed && (
               <>
                 <li><Item to="/login">Inicia sesión</Item></li>
@@ -65,6 +66,7 @@ export default function Header({ authed, onLogout }: Props) {
             {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
+            {authed && <li><Item to="/favorites">Favoritos</Item></li>}
             {!authed && (
               <>
                 <li><Item to="/login">Inicia sesión</Item></li>
