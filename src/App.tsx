@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
 import Pexels from "./pages/Pexels";
+import Favorites from "./pages/Favorites";
 import Footer from "./components/Footer";
 import Header from "./components/Header";                
 import ChangePassword from "./pages/ChangePassword";
@@ -90,6 +91,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           {authed && <Route path="/pexels" element={<Pexels />} />}
+          {authed && <Route path="/favorites" element={<Favorites />} />}
           <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />
           <Route path="/signup" element={<Signup />} />
           {authed && <Route path="/profile" element={<Profile />} />}

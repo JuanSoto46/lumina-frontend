@@ -988,7 +988,6 @@ body.login-page .login-container {
   }
 }
 
-/* New thumb wrapper to make tall thumbnails like the screenshot */
 .video-thumb-wrap {
   position: relative;
   width: 100%;
@@ -996,6 +995,38 @@ body.login-page .login-container {
   background: #111;
   display: block;
   overflow: hidden;
+}
+
+.simple-heart {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #ffffff;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.liked {
+    color: #ff4081;
+    
+    &:hover {
+      background: rgba(255, 64, 129, 0.1);
+      transform: scale(1.1);
+    }
+  }
 }
 
 .video-thumb {
@@ -1011,8 +1042,8 @@ body.login-page .login-container {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: #ffffff;
-  color: #111;
+  background: #4a5568;
+  color: #ffffff;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 }
@@ -1027,7 +1058,7 @@ body.login-page .login-container {
 .video-bottom-bar .video-title {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #111;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1035,7 +1066,7 @@ body.login-page .login-container {
 
 .video-bottom-bar .video-meta {
   font-size: 0.85rem;
-  color: #666;
+  color: #e8e8e8;
 }
 
 .video-bottom-bar .info-right {
@@ -1424,7 +1455,251 @@ body.login-page .login-container {
   .show-md { display: inline-flex; }
 }
 
-/* Ajustes al header y menú móvil */
+
+// Favorites page styles
+.favorites-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 76px);
+  background: transparent;
+  padding: 40px 20px;
+}
+
+.favorites-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 1200px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.favorites-title {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+  color: $text;
+  text-align: center;
+  font-weight: 700;
+}
+
+.favorites-description {
+  text-align: center;
+  color: $muted;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.favorites-message {
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+
+  &.success {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #4caf50;
+  }
+
+  &.error {
+    background: rgba(244, 67, 54, 0.15);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    color: #f44336;
+  }
+
+  &.info {
+    background: rgba(46, 91, 255, 0.15);
+    border: 1px solid rgba(46, 91, 255, 0.3);
+    color: $primary;
+  }
+}
+
+.empty-favorites {
+  text-align: center;
+  padding: 60px 20px;
+  color: $muted;
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: $text;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #2e5bff 0%, #6c5ce7 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(46, 91, 255, 0.3);
+    }
+  }
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.favorite-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  .favorite-item:hover & {
+    opacity: 1;
+  }
+
+  button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+
+    &:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    &.remove-btn:hover {
+      background: #f44336;
+      color: white;
+    }
+  }
+}
+
+.video-info {
+  padding: 16px;
+
+  .video-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .added-date {
+    font-size: 0.85rem;
+    color: $muted;
+  }
+}
+
+// Responsividad para favoritos
+@media (max-width: 768px) {
+  .favorites-container {
+    padding: 20px 10px;
+  }
+
+  .favorites-card {
+    padding: 24px;
+  }
+
+  .favorites-title {
+    font-size: 1.8rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .favorites-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .empty-favorites {
+    padding: 40px 15px;
+
+    .empty-icon {
+      font-size: 3rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+    }
+  }
+}
 .nav { 
   background: rgba(255,255,255,.04);
   border-bottom: 1px solid rgba(255,255,255,.08);
