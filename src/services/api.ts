@@ -67,4 +67,21 @@ export const api = {
     getVideoById: (id: string | number) => http(`/api/pexels/videos/${id}`),
     healthCheck: () => http("/api/pexels/"),
   },
+
+  favorites: {
+    async getAll() {
+      return http("/api/favorites");
+    },
+    async add(video: { id: string; title: string; url: string; thumbnail: string }) {
+      return http("/api/favorites", {
+        method: "POST",
+        body: JSON.stringify(video),
+      });
+    },
+    async remove(id: string) {
+      return http(`/api/favorites/${id}`, {
+        method: "DELETE",
+      });
+    },
+  },
 };
