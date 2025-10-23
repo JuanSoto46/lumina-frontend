@@ -27,6 +27,26 @@ export default function Signup() {
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
 
+  function validatePasswordStrength(password: string): string | null {
+    if (password.length < 8) {
+      return "La contraseña debe tener al menos 8 caracteres.";
+    }
+    const weakPasswords = [
+      "123456", "password", "qwerty", "abc123",
+      "12345678", "123456789", "111111", "password1",
+      "123123", "contraseña"
+    ];
+    if (weakPasswords.includes(password.toLowerCase())) {
+      return "La contraseña es muy común. Por favor elija otra.";
+    }
+    const strongRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]|;:"<>,.?/~`]).+$/;
+    if (!strongRegex.test(password)) {
+      return "La contraseña debe incluir al menos una letra mayúscula, un número y un símbolo..";
+    }
+    return null;
+  }
+
+
   /* The `useEffect` hook in the provided code snippet is used to add a CSS class to the `body` element
   of the document when the `Signup` component mounts, and then remove that class when the component
   unmounts. */
@@ -58,6 +78,7 @@ export default function Signup() {
    */
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const ageNum = Number(form.age);
 
     if (Number(form.age) < 18 || isNaN(Number(form.age))) {
       setMsg("Debes tener al menos 18 años para registrarte.");
@@ -65,9 +86,16 @@ export default function Signup() {
       return;
     }
 
+
     if (form.password !== form.confirmPassword) {
       setMsg("Las contraseñas no coinciden.");
       setMsgType("error");
+      return;
+    }
+
+    const err = validatePasswordStrength(form.password);
+    if (err) {
+      setMsg(err);
       return;
     }
 

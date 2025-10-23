@@ -85,10 +85,10 @@ interface PexelsResponse {
  */
 const Pexels: React.FC = () => {
   console.log('Pexels component rendering...');
-  
+
   // Verify authentication
   const isAuthenticated = !!localStorage.getItem("token");
-  
+
   const [videos, setVideos] = useState<PexelsVideo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,6 +96,23 @@ const Pexels: React.FC = () => {
   const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
+  const [savingFavorite, setSavingFavorite] = useState<number | null>(null); // 👈 aquí va
+
+  // 🔥 Cargar favoritos del usuario cuando se monta el componente
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const favorites = await api.favorites.getAll(); // GET /favorites
+        const favoriteIds = favorites.map((f: any) => parseInt(f.id, 10)); // ids en número
+        setLikedVideos(new Set(favoriteIds)); // sincroniza el estado local con los del backend
+        console.log("❤️ Favoritos cargados:", favoriteIds);
+      } catch (err) {
+        console.error("❌ Error al cargar favoritos:", err);
+      }
+    };
+
+    loadFavorites();
+  }, []);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -152,7 +169,7 @@ const Pexels: React.FC = () => {
    */
   const searchVideos = async (query: string, terms?: string) => {
     if (!query.trim() && !terms?.trim()) return;
-    
+
     setLoading(true);
     setError(null);
     try {
@@ -216,11 +233,11 @@ const Pexels: React.FC = () => {
    */
   const getBestVideoFile = (videoFiles?: Array<any>) => {
     if (!videoFiles || videoFiles.length === 0) return null;
-    
+
     // Prefer HD quality, then SD, then any other
     const hd = videoFiles.find(file => file.quality === 'hd');
     const sd = videoFiles.find(file => file.quality === 'sd');
-    
+
     return hd || sd || videoFiles[0];
   };
 
@@ -240,19 +257,67 @@ const Pexels: React.FC = () => {
    * @param {number} videoId - The ID of the video to toggle
    * @param {React.MouseEvent} e - The click event
    */
-  const toggleLike = (videoId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setLikedVideos(prev => {
-      const newLiked = new Set(prev);
-      if (newLiked.has(videoId)) {
-        newLiked.delete(videoId);
-      } else {
-        newLiked.add(videoId);
-      }
-      return newLiked;
-    });
-  };
+  const toggleLike = async (videoId: number, e: React.MouseEvent) => {
+  e.stopPropagation();
 
+  const alreadyLiked = likedVideos.has(videoId);
+
+  // Actualiza el corazón visualmente de inmediato
+  setLikedVideos(prev => {
+    const newLiked = new Set(prev);
+    if (alreadyLiked) newLiked.delete(videoId);
+    else newLiked.add(videoId);
+    return newLiked;
+  });
+
+  // Luego hace la petición al backend (una sola vez)
+  if (alreadyLiked) {
+    await removeFromFavorites(videoId);
+  } else {
+    await addToFavorites(videoId);
+  }
+};
+
+
+  /**
+   * Adds a video to user's favorites in backend
+   */
+  const addToFavorites = async (videoId: number) => {
+  if (savingFavorite === videoId) return; // 🚫 evita doble petición
+  setSavingFavorite(videoId);
+
+  const video = videos.find(v => v.id === videoId);
+  if (!video) return;
+
+  // ✅ Obtener el archivo de video reproducible (.mp4)
+  const bestFile = getBestVideoFile(video.video_files);
+
+  try {
+    await api.favorites.add({
+      id: video.id.toString(),
+      title: `Video por ${video.user.name}`,
+      url: bestFile?.link || video.video_files[0]?.link, // ✅ guardamos el enlace real
+      thumbnail: video.image,
+    });
+    console.log("✅ Added to favorites");
+  } catch (err) {
+    console.error("❌ Error adding to favorites:", err);
+  } finally {
+    setSavingFavorite(null);
+  }
+};
+
+  /**
+   * Removes a video from user's favorites in backend
+   */
+  const removeFromFavorites = async (videoId: number) => {
+    try {
+      await api.favorites.remove(videoId.toString());
+      console.log("🗑️ Removed from favorites");
+    } catch (err) {
+      console.error("❌ Error removing from favorites:", err);
+    }
+  };
   /**
    * Checks if a video is liked
    * @param {number} videoId - The ID of the video to check
@@ -268,7 +333,7 @@ const Pexels: React.FC = () => {
         <header className="pexels-header">
           <h1>Videos de Pexels</h1>
           <p>Descubre videos gratuitos de alta calidad</p>
-          
+
           <form onSubmit={handleSearch} className="search-form">
             <div className="search-input-group">
               <input
@@ -285,28 +350,28 @@ const Pexels: React.FC = () => {
           </form>
 
           <div className="quick-actions">
-            <button 
+            <button
               onClick={loadPopularVideos}
               className="quick-action-btn"
               disabled={loading}
             >
               Videos Populares
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('nature')}
               className="quick-action-btn"
               disabled={loading}
             >
               Naturaleza
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('technology')}
               className="quick-action-btn"
               disabled={loading}
             >
               Tecnología
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('city')}
               className="quick-action-btn"
               disabled={loading}
@@ -342,7 +407,7 @@ const Pexels: React.FC = () => {
                   </div>
                 </div>
                 <div className="info-right">
-                  <button 
+                  <button
                     className={`simple-heart ${isLiked(video.id) ? 'liked' : ''}`}
                     onClick={(e) => toggleLike(video.id, e)}
                     aria-label={isLiked(video.id) ? 'Quitar me gusta' : 'Me gusta'}
@@ -377,7 +442,7 @@ const Pexels: React.FC = () => {
               <h2>Video por {selectedVideo.user.name}</h2>
               <button className="close-button" onClick={closeModal}>×</button>
             </div>
-            
+
             <div className="video-player">
               {getBestVideoFile(selectedVideo.video_files) ? (
                 <video
@@ -387,9 +452,9 @@ const Pexels: React.FC = () => {
                   className="video-element"
                   poster={selectedVideo.image}
                 >
-                  <source 
-                    src={getBestVideoFile(selectedVideo.video_files)?.link} 
-                    type="video/mp4" 
+                  <source
+                    src={getBestVideoFile(selectedVideo.video_files)?.link}
+                    type="video/mp4"
                   />
                   Tu navegador no soporta el elemento video.
                 </video>
@@ -403,7 +468,7 @@ const Pexels: React.FC = () => {
             <div className="video-details">
               <p><strong>Duración:</strong> {formatDuration(selectedVideo.duration)}</p>
               <p><strong>Dimensiones:</strong> {selectedVideo.width}x{selectedVideo.height}</p>
-              
+
               {selectedVideo.video_files && selectedVideo.video_files.length > 0 && (
                 <div className="quality-options">
                   <p><strong>Calidades disponibles:</strong></p>
@@ -424,9 +489,9 @@ const Pexels: React.FC = () => {
               )}
 
               <div className="external-link">
-                <a 
-                  href={selectedVideo.url} 
-                  target="_blank" 
+                <a
+                  href={selectedVideo.url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="pexels-link"
                 >
