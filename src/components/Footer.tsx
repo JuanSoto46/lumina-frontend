@@ -9,6 +9,7 @@ export default function Footer() {
         <ul>
           <li><Link to="/">Inicio</Link></li>
           <li><Link to="/about">Sobre nosotros</Link></li>
+          <li><Link to="/user-manual">Manual de usuario</Link></li>
           <li><Link to="/login">Inicia sesión</Link></li>
           <li><Link to="/signup">Crea una cuenta</Link></li>
           <li><Link to="/forgot">Recuperar contraseña</Link></li>

@@ -34,6 +34,7 @@ export default function Header({ authed, onLogout }: Props) {
           <ul>
             {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
+            <li><Item to="/user-manual">Manual de usuario</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
             {authed && <li><Item to="/favorites">Favoritos</Item></li>}
             {!authed && (
@@ -65,6 +66,7 @@ export default function Header({ authed, onLogout }: Props) {
           <ul onClick={() => setOpen(false)}>
             {!authed && <li><Item to="/">Inicio</Item></li>}
             <li><Item to="/about">Sobre nosotros</Item></li>
+            <li><Item to="/user-manual">Manual de usuario</Item></li>
             {authed && <li><Item to="/pexels">Videos</Item></li>}
             {authed && <li><Item to="/favorites">Favoritos</Item></li>}
             {!authed && (
