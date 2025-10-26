@@ -11,6 +11,7 @@ import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
 import Pexels from "./pages/Pexels";
 import Favorites from "./pages/Favorites";
+import UserManual from "./pages/UserManual";
 import Footer from "./components/Footer";
 import Header from "./components/Header";                
 import ChangePassword from "./pages/ChangePassword";
@@ -90,6 +91,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/user-manual" element={<UserManual />} />
           {authed && <Route path="/pexels" element={<Pexels />} />}
           {authed && <Route path="/favorites" element={<Favorites />} />}
           <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />

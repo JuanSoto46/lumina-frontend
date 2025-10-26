@@ -92,7 +92,7 @@ const Pexels: React.FC = () => {
   const [videos, setVideos] = useState<PexelsVideo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('nature');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
@@ -331,7 +331,7 @@ const Pexels: React.FC = () => {
     <div className="pexels-page">
       <div className="container">
         <header className="pexels-header">
-          <h1>Videos de Pexels</h1>
+          <h1>Videos de Lumina</h1>
           <p>Descubre videos gratuitos de alta calidad</p>
 
           <form onSubmit={handleSearch} className="search-form">
