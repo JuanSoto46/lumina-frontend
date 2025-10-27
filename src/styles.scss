@@ -19,8 +19,18 @@ $muted: $text-muted;
 
 
 :root {
-  color-scheme: light dark;
+  --bg: #0a0f14;
+  --card: #0f1520;
+  --text: #e6edf3;
+  --muted: #94a3b8;
+  --primary: #6c63ff;
+  --primary-soft: rgba(108, 99, 255, 0.16);
+  --accent: #ff4081;
+  --accent-soft: rgba(255, 64, 129, 0.16);
+  --border: #233042;
+  --shadow: rgba(0, 0, 0, 0.35);
 }
+
 
 body {
   margin: 0;
@@ -2700,7 +2710,7 @@ body.login-page .login-container {
 
 /* =========================================================
    FIX PasswordField (alineación, accesibilidad)
-   PÉGALO AL FINAL DE styles.scss
+   
    ========================================================= */
 .login-input { min-height: 44px; line-height: 1.2; box-sizing: border-box; }
 
@@ -2891,4 +2901,200 @@ body.login-page .login-container {
 @media (max-width: 480px){
   .videos-grid { grid-template-columns: 1fr; }
   .video-card .video-thumb-wrap { aspect-ratio: 16/10; }
+}
+
+/* =========================================================
+   PÁGINA DE VIDEOS – profesional, limpia y responsive
+   ========================================================= */
+
+.videos-page {
+  container-type: inline-size;
+  padding: 16px 20px 28px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Barra de categorías (opcional, pero útil) */
+.category-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 14px;
+  margin: 6px 0 16px;
+  scrollbar-width: thin;
+}
+.category-chip {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 70%, black);
+  color: var(--text);
+  font-size: .9rem;
+  white-space: nowrap;
+  transition: transform .12s, background .15s, border-color .15s, box-shadow .15s;
+}
+.category-chip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 60%, white 0%);
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--primary) 20%, black);
+}
+.category-chip.is-active {
+  background: color-mix(in oklab, var(--primary) 22%, var(--card));
+  border-color: color-mix(in oklab, var(--primary) 60%, var(--border));
+}
+
+/* Grid de tarjetas */
+.videos-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Tarjeta */
+.video-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;             /* controla la miniatura, no el footer */
+  box-shadow: 0 6px 28px var(--shadow);
+  transition: transform .14s ease, box-shadow .18s ease, border-color .15s;
+}
+.video-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+  box-shadow: 0 12px 36px color-mix(in oklab, var(--primary) 18%, black);
+}
+
+/* Miniatura fija a 16:9 y recorte correcto */
+.video-thumb-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #0b0f14;
+  overflow: hidden;             /* solo aquí recortamos la imagen */
+}
+.video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0);
+}
+
+/* Overlay y controles */
+.video-overlay {
+  pointer-events: none;         /* no bloquea clics del corazón */
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  padding: 10px;
+  background: linear-gradient(to top, rgba(0,0,0,.35) 20%, rgba(0,0,0,0) 70%);
+}
+
+.play-button {
+  pointer-events: auto;
+  position: absolute;
+  inset: auto auto 10px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 70%, black);
+  color: var(--text);
+  font-size: 18px;
+  transition: transform .12s, box-shadow .15s, border-color .15s, background .15s;
+}
+.play-button:hover {
+  transform: scale(1.04);
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--primary) 24%, black);
+}
+
+.video-duration-badge {
+  pointer-events: none;
+  margin-left: auto;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 75%, black);
+  color: var(--muted);
+  font-size: .8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Footer estable: título + acciones */
+.video-bottom-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px;
+  min-height: 56px;             /* asegura espacio para el corazón */
+  border-top: 1px solid var(--border);
+  background: linear-gradient(90deg, color-mix(in oklab, var(--card) 92%, black), color-mix(in oklab, var(--card) 88%, black));
+  overflow: visible;            /* nada se corta aquí */
+}
+.video-title {
+  flex: 1 1 auto;
+  min-width: 0;                 /* habilita elipsis */
+  color: var(--text);
+  font-weight: 700;
+  font-size: .98rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.video-actions {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botón corazón con área de toque generosa y foco visible */
+.heart-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 70%, black);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform .1s, border-color .15s, box-shadow .15s, background .15s, color .15s;
+}
+.heart-btn:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+  box-shadow: 0 10px 26px color-mix(in oklab, var(--primary) 22%, black);
+}
+.heart-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+.heart-btn.is-liked {
+  background: var(--accent-soft);
+  border-color: color-mix(in oklab, var(--accent) 60%, var(--border));
+  color: var(--accent);
+  box-shadow: 0 10px 26px color-mix(in oklab, var(--accent) 24%, black);
+}
+
+/* Responsive fino */
+@media (max-width: 520px) {
+  .videos-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .video-bottom-bar { padding: 10px; min-height: 52px; }
+  .heart-btn { width: 38px; height: 38px; }
 }
