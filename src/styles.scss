@@ -1,8 +1,22 @@
 // Minimal responsive layout + accessible colors
-$primary: #2e5bff;
-$bg: linear-gradient(135deg, #1a2332 0%, #2d4a5a 50%, #1a2332 100%);
-$text: #e6e6e6;
-$muted: #aab0b8;
+@use "sass:color";
+@use "./tokens" as *;
+
+
+/* === PALETA  === */
+$primary: #6c63ff;              // violeta principal
+$primary-dark: #4f46e5;         // violeta hover
+$accent: #ff6f61;               // coral
+$accent-gradient: linear-gradient(135deg, #ff6f61 0%, #f538a0 50%, #6c63ff 100%);
+$background-dark: #0f172a;      // fondo app
+$background-light: #1e293b;     // tarjetas/paneles
+$text: #e2e8f0;                 // texto
+$text-muted: #94a3b8;           // texto secundario
+$border: #334155;               // bordes
+
+/* Alias para no reventar nada que use $muted */
+$muted: $text-muted;
+
 
 :root {
   color-scheme: light dark;
@@ -2683,3 +2697,198 @@ body.login-page .login-container {
 /* Small fixes so rails and grid don’t collide */
 .videos-grid { margin-top: 16px; }
 .video-duration { position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,.8); color:#fff; font-size:.8rem; padding:3px 6px; border-radius:6px; font-weight:700; }
+
+/* =========================================================
+   FIX PasswordField (alineación, accesibilidad)
+   PÉGALO AL FINAL DE styles.scss
+   ========================================================= */
+.login-input { min-height: 44px; line-height: 1.2; box-sizing: border-box; }
+
+.password-field { width: 100%; }
+.password-label { display:block; margin: 0 0 6px; color: $text; font-weight: 600; }
+
+.password-wrap { position: relative; }
+
+.password-wrap > .login-input,
+.password-wrap > input[type="password"],
+.password-wrap > input[type="text"] {
+  padding-right: 48px;     /* espacio fijo para el ojito */
+}
+
+/* Botón “ojo” centrado y quieto */
+.password-wrap .eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%) !important;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid $border;
+  background: transparent;
+  color: $text;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  box-shadow: none;
+}
+.password-wrap .eye-btn svg { width: 22px; height: 22px; display: block; }
+
+@media (hover:hover){
+  .password-wrap .eye-btn:hover {
+    border-color: color.adjust($border, $lightness: 10%);
+  }
+}
+
+.password-wrap .eye-btn:focus,
+.password-wrap .eye-btn:active {
+  outline: none;
+  transform: translateY(-50%) !important; /* sin “saltos” */
+}
+
+@media (max-width: 640px){
+  .login-input { min-height: 42px; }
+  .password-wrap .eye-btn { width: 34px; height: 34px; }
+}
+
+
+/* =========================================================
+   VIDEOS – catálogo estilo Netflix 
+   
+   ========================================================= */
+
+/* Header de la página de videos */
+.pexels-header {
+  text-align: center;
+  margin-bottom: 22px;
+  padding: 28px 22px;
+  background: radial-gradient(1000px 420px at 20% -10%, rgba(108,99,255,.22), transparent 60%), $background-light;
+  border: 1px solid $border;
+  border-radius: 20px;
+}
+.pexels-header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.2rem);
+  font-weight: 900;
+  background: $accent-gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pexels-header p { margin: 0; color: $text-muted; }
+
+/* Buscador y chips */
+.search-input {
+  border: 1px solid $border;
+  background: #162033;
+  color: $text;
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: box-shadow .15s, border-color .15s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: $primary;
+  box-shadow: 0 0 0 3px rgba(108,99,255,.25);
+}
+.quick-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
+.quick-action-btn {
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(108,99,255,.12);
+  color: $text;
+  border: 1px solid rgba(108,99,255,.28);
+}
+
+/* Grid responsivo tipo catálogo */
+.videos-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+/* Tarjeta de video con overlay y hover */
+.video-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(30,41,59,.66);
+  border: 1px solid $border;
+  box-shadow: 0 8px 22px rgba(0,0,0,.28);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+  cursor: pointer;
+}
+.video-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(108,99,255,.5);
+  box-shadow: 0 14px 40px rgba(0,0,0,.38);
+}
+.video-thumb-wrap { position: relative; aspect-ratio: 16/9; background: #0b0f14; }
+.video-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform .25s; }
+.video-card:hover .video-thumb { transform: scale(1.06); }
+
+/* Overlay + botón play + duración */
+.video-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+  opacity: 0; transition: opacity .2s ease;
+}
+.video-card:hover .video-overlay { opacity: 1; }
+
+.play-button {
+  width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(108,99,255,.92);
+  color: #fff; font-size: 24px;
+  box-shadow: 0 10px 32px rgba(108,99,255,.35);
+}
+.video-duration-badge {
+  position: absolute; right: 10px; bottom: 10px;
+  font-size: .82rem; font-weight: 700; letter-spacing: .3px;
+  background: rgba(0,0,0,.78); color: #fff;
+  padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,.14);
+}
+
+/* Barra inferior con título y meta */
+.video-bottom-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, rgba(30,41,59,.94), rgba(30,41,59,.86));
+  border-top: 1px solid $border;
+}
+.video-bottom-bar .video-title {
+  color: $text; font-weight: 700; font-size: .98rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.video-bottom-bar .video-meta { color: $text-muted; font-size: .85rem; }
+
+/* Botón corazón sencillo */
+.simple-heart {
+  background: transparent; border: 1px solid $border; color: $text;
+  width: 36px; height: 36px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: border-color .15s, transform .1s, box-shadow .15s, background .15s;
+}
+.simple-heart:hover {
+  transform: translateY(-1px);
+  border-color: rgba(108,99,255,.6);
+  box-shadow: 0 8px 22px rgba(108,99,255,.25);
+}
+.simple-heart.liked {
+  background: rgba(255,111,97,.16);
+  border-color: rgba(255,111,97,.55);
+  box-shadow: 0 8px 22px rgba(255,111,97,.25);
+  color: #ff4081;
+}
+
+/* Responsivo */
+@media (max-width: 768px){
+  .videos-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+}
+@media (max-width: 480px){
+  .videos-grid { grid-template-columns: 1fr; }
+  .video-card .video-thumb-wrap { aspect-ratio: 16/10; }
+}
