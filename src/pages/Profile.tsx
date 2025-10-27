@@ -42,10 +42,10 @@ export default function Profile() {
     load();
   }, []);
 
- /**
-  * The function `save` updates user profile information using an API call and displays a success
-  * message if the update is successful, or an error message if there is an error.
-  */
+  /**
+   * The function `save` updates user profile information using an API call and displays a success
+   * message if the update is successful, or an error message if there is an error.
+   */
   async function save() {
     try {
       const updated = await api.updateMe({
@@ -74,6 +74,11 @@ export default function Profile() {
       setMsg(e.message);
     }
   }
+
+  useEffect(() => {
+    document.body.classList.add("login-page");
+    return () => document.body.classList.remove("login-page");
+  }, []);
 
   /* The code snippet `if (!localStorage.getItem("token")) return <p>Por favor inicia sesión
   primero.</p>; if (!me) return <p>Cargando perfil...</p>;` in the `Profile` component is performing

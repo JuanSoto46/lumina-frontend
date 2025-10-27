@@ -1,0 +1,39 @@
+@use "sass:color";
+
+/* ===========================
+   TOKENS (PALETA)
+   =========================== */
+
+/* Paleta base */
+$primary: #6c63ff !default;        // violeta principal
+$primary-dark: #4f46e5 !default;   // violeta hover
+$accent: #ff6f61 !default;         // coral
+$background-dark: #0f172a !default; // fondo app
+$background-light: #1e293b !default; // tarjetas/paneles
+$text: #e2e8f0 !default;           // texto
+$text-muted: #94a3b8 !default;     // texto secundario
+$border: #334155 !default;         // bordes
+
+/* Gradiente destacado */
+$accent-gradient: linear-gradient(135deg, #ff6f61 0%, #f538a0 50%, #6c63ff 100%) !default;
+
+/* ===========================
+   ALIAS DE COMPATIBILIDAD
+   (para no romper nada legacy)
+   =========================== */
+$muted: $text-muted !default;
+$bg: $background-dark !default;      // si tu código viejo usa $bg
+$background: $background-dark !default; // por si alguien usó $background a secas
+
+/* ===========================
+   MIXINS UTILITARIOS
+   =========================== */
+@mixin focus-ring($color: $primary) {
+  outline: none;
+  box-shadow: 0 0 0 3px color.change($color, $alpha: 0.25);
+}
+
+/* Espaciado extra a la derecha para iconos en inputs */
+@mixin pad-for-icon($px: 48px) {
+  padding-right: $px;
+}
