@@ -258,54 +258,53 @@ const Pexels: React.FC = () => {
    * @param {React.MouseEvent} e - The click event
    */
   const toggleLike = async (videoId: number, e: React.MouseEvent) => {
-  e.stopPropagation();
+    e.stopPropagation();
 
-  const alreadyLiked = likedVideos.has(videoId);
+    const alreadyLiked = likedVideos.has(videoId);
 
-  // Actualiza el corazón visualmente de inmediato
-  setLikedVideos(prev => {
-    const newLiked = new Set(prev);
-    if (alreadyLiked) newLiked.delete(videoId);
-    else newLiked.add(videoId);
-    return newLiked;
-  });
+    // Update the heart visually immediately
+    setLikedVideos(prev => {
+      const newLiked = new Set(prev);
+      if (alreadyLiked) newLiked.delete(videoId);
+      else newLiked.add(videoId);
+      return newLiked;
+    });
 
-  // Luego hace la petición al backend (una sola vez)
-  if (alreadyLiked) {
-    await removeFromFavorites(videoId);
-  } else {
-    await addToFavorites(videoId);
-  }
-};
+    if (alreadyLiked) {
+      await removeFromFavorites(videoId);
+    } else {
+      await addToFavorites(videoId);
+    }
+  };
 
 
   /**
    * Adds a video to user's favorites in backend
    */
   const addToFavorites = async (videoId: number) => {
-  if (savingFavorite === videoId) return; // 🚫 evita doble petición
-  setSavingFavorite(videoId);
+    if (savingFavorite === videoId) return; // 🚫 evita doble petición
+    setSavingFavorite(videoId);
 
-  const video = videos.find(v => v.id === videoId);
-  if (!video) return;
+    const video = videos.find(v => v.id === videoId);
+    if (!video) return;
 
-  // ✅ Obtener el archivo de video reproducible (.mp4)
-  const bestFile = getBestVideoFile(video.video_files);
+    // ✅ Obtener el archivo de video reproducible (.mp4)
+    const bestFile = getBestVideoFile(video.video_files);
 
-  try {
-    await api.favorites.add({
-      id: video.id.toString(),
-      title: `Video por ${video.user.name}`,
-      url: bestFile?.link || video.video_files[0]?.link, // ✅ guardamos el enlace real
-      thumbnail: video.image,
-    });
-    console.log("✅ Added to favorites");
-  } catch (err) {
-    console.error("❌ Error adding to favorites:", err);
-  } finally {
-    setSavingFavorite(null);
-  }
-};
+    try {
+      await api.favorites.add({
+        id: video.id.toString(),
+        title: `Video por ${video.user.name}`,
+        url: bestFile?.link || video.video_files[0]?.link,
+        thumbnail: video.image,
+      });
+      console.log("✅ Added to favorites");
+    } catch (err) {
+      console.error("❌ Error adding to favorites:", err);
+    } finally {
+      setSavingFavorite(null);
+    }
+  };
 
   /**
    * Removes a video from user's favorites in backend
@@ -326,6 +325,112 @@ const Pexels: React.FC = () => {
   const isLiked = (videoId: number) => {
     return likedVideos.has(videoId);
   };
+
+  /** Interface for the structure of a comment */
+  interface Comment {
+    _id: string;
+    content: string;
+    user: {
+      _id: string;
+      firstName: string;
+    };
+    videoId: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  /** Estado para la lista de comentarios del video actual */
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  /** Estado para el contenido del nuevo comentario siendo escrito */
+  const [newComment, setNewComment] = useState("");
+
+  /** ID del comentario siendo editado, null si no hay edición activa */
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+
+  /** Contenido temporal durante la edición de un comentario */
+  const [editContent, setEditContent] = useState("");
+
+  /** 
+   * Efecto para cargar los comentarios cuando se selecciona un video
+   * Se ejecuta cada vez que cambia selectedVideo
+   */
+  useEffect(() => {
+    if (selectedVideo) {
+      api.comments.getByVideo(selectedVideo.id.toString())
+        .then(setComments)
+        .catch(error => {
+          console.error("Error al cargar comentarios:", error);
+        });
+    }
+  }, [selectedVideo]);
+
+  /**
+   * Añade un nuevo comentario al video actual
+   * @returns {Promise<void>}
+   */
+  const handleAddComment = async (): Promise<void> => {
+    if (!newComment.trim() || !selectedVideo) return;
+
+    try {
+      const comment = await api.comments.add({
+        videoId: selectedVideo.id.toString(),
+        content: newComment.trim()
+      });
+      setComments([comment, ...comments]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error al añadir comentario:", error);
+    }
+  };
+
+  /**
+   * Elimina un comentario específico
+   * @param {string} id - ID del comentario a eliminar
+   */
+  const handleDeleteComment = async (id: string): Promise<void> => {
+    try {
+      await api.comments.remove(id);
+      setComments(comments.filter(c => c._id !== id));
+    } catch (error) {
+      console.error("Error al eliminar comentario:", error);
+    }
+  };
+
+  /**
+   * Prepara la interfaz para editar un comentario
+   * @param {Comment} comment - Comentario a editar
+   */
+  const handleEditComment = (comment: Comment): void => {
+    setEditingCommentId(comment._id);
+    setEditContent(comment.content);
+  };
+
+  /**
+   * Actualiza el contenido de un comentario existente
+   * @param {string} id - ID del comentario a actualizar
+   */
+  const handleUpdateComment = async (id: string): Promise<void> => {
+    if (!editContent.trim()) return;
+
+    try {
+      const updated = await api.comments.update(id, { content: editContent.trim() });
+      // Preservar la información del usuario del comentario original
+      const originalComment = comments.find(c => c._id === id);
+      if (originalComment) {
+        const updatedWithUser = {
+          ...updated,
+          user: originalComment.user // Mantener la info del usuario original
+        };
+        setComments(comments.map(c => (c._id === id ? updatedWithUser : c)));
+      }
+      setEditingCommentId(null);
+      setEditContent("");
+    } catch (error) {
+      console.error("❌ Error al actualizar comentario:", error);
+    }
+  };
+
 
   return (
     <div className="pexels-page">
@@ -498,6 +603,48 @@ const Pexels: React.FC = () => {
                   Ver en Pexels ↗
                 </a>
               </div>
+            </div>
+
+            {/* 🗨️ Sección de comentarios */}
+            <div className="comments-section">
+              <h3>Comentarios</h3>
+
+              <div className="add-comment">
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Escribe un comentario..."
+                />
+                <button onClick={handleAddComment}>Enviar</button>
+              </div>
+
+              <ul className="comments-list">
+                {comments.map((c) => (
+                  <li key={c._id}>
+                    <p><strong>{c.user.firstName}:</strong></p>
+
+                    {editingCommentId === c._id ? (
+                      <div className="edit-comment">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                        />
+                        <button onClick={() => handleUpdateComment(c._id)}>💾 Guardar</button>
+                        <button onClick={() => setEditingCommentId(null)}>❌ Cancelar</button>
+                      </div>
+                    ) : (
+                      <p>{c.content}</p>
+                    )}
+
+                    {c.user._id === JSON.parse(atob(localStorage.getItem("token")!.split(".")[1])).id && (
+                      <div className="comment-actions">
+                        <button onClick={() => handleEditComment(c)}>✏️</button>
+                        <button onClick={() => handleDeleteComment(c._id)}>🗑️</button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

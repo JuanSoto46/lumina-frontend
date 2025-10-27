@@ -1775,3 +1775,188 @@ body.login-page .login-container {
     padding: 25px;
   }
 }
+
+/* ============================
+   💬 Estilos de Comentarios
+============================ */
+.comments-section {
+  margin-top: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  h3 {
+    font-size: 1.4rem;
+    color: $text;
+    margin-bottom: 20px;
+    border-left: 4px solid $primary;
+    padding-left: 12px;
+  }
+
+  &:hover {
+    border-color: rgba(46, 91, 255, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+.add-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+
+  textarea {
+    resize: none;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: $text;
+    font-size: 0.95rem;
+    min-height: 80px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.2);
+      outline: none;
+    }
+  }
+
+  button {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #2e5bff 0%, #6c5ce7 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(46, 91, 255, 0.3);
+    }
+  }
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 18px;
+
+  li {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px 18px;
+    position: relative;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    p {
+      margin: 4px 0;
+      color: $muted;
+
+      strong {
+        color: $text;
+      }
+    }
+  }
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  button {
+    background: transparent;
+    border: none;
+    color: $muted;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.edit-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+
+  textarea {
+    min-height: 70px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: $text;
+    padding: 10px;
+    resize: none;
+
+    &:focus {
+      border-color: $primary;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.2);
+    }
+  }
+
+  button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:first-of-type {
+      background: linear-gradient(135deg, #2e5bff 0%, #6c5ce7 100%);
+      color: white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(46, 91, 255, 0.3);
+      }
+    }
+
+    &:last-of-type {
+      background: rgba(231, 76, 60, 0.2);
+      color: #e74c3c;
+
+      &:hover {
+        background: rgba(231, 76, 60, 0.35);
+      }
+    }
+  }
+}
+
+/* 🌙 Adaptación responsive */
+@media (max-width: 640px) {
+  .add-comment button {
+    align-self: stretch;
+  }
+
+  .comment-actions {
+    position: static;
+    justify-content: flex-end;
+  }
+}
+
