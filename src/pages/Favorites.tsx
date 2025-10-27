@@ -156,7 +156,6 @@ export default function Favorites() {
         )}
       </div>
 
-      {/* 🎬 Modal de video */}
       {showModal && selectedVideo && (
         <div className="video-modal" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
