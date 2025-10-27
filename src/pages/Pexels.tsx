@@ -339,35 +339,35 @@ const Pexels: React.FC = () => {
     updatedAt: string;
   }
 
-  /** Estado para la lista de comentarios del video actual */
+  /** State for the current video's comment list */
   const [comments, setComments] = useState<Comment[]>([]);
 
-  /** Estado para el contenido del nuevo comentario siendo escrito */
+  /** State for the new comment being written */
   const [newComment, setNewComment] = useState("");
 
-  /** ID del comentario siendo editado, null si no hay edición activa */
+  /** ID of the comment being edited, null if no active edit */
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
 
-  /** Contenido temporal durante la edición de un comentario */
+  /** Temporary content while editing a comment */
   const [editContent, setEditContent] = useState("");
 
   /** 
-   * Efecto para cargar los comentarios cuando se selecciona un video
-   * Se ejecuta cada vez que cambia selectedVideo
+   * Effect to load comments when a video is selected
+   * Executes every time selectedVideo changes
    */
   useEffect(() => {
     if (selectedVideo) {
       api.comments.getByVideo(selectedVideo.id.toString())
         .then(setComments)
         .catch(error => {
-          console.error("Error al cargar comentarios:", error);
+          console.error("Error loading comments:", error);
         });
     }
   }, [selectedVideo]);
 
   /**
-   * Añade un nuevo comentario al video actual
-   * @returns {Promise<void>}
+   * Adds a new comment to the current video
+   * @returns {Promise<void>} Promise that resolves when the comment is added
    */
   const handleAddComment = async (): Promise<void> => {
     if (!newComment.trim() || !selectedVideo) return;
@@ -380,26 +380,27 @@ const Pexels: React.FC = () => {
       setComments([comment, ...comments]);
       setNewComment("");
     } catch (error) {
-      console.error("Error al añadir comentario:", error);
+      console.error("Error adding comment:", error);
     }
   };
 
   /**
-   * Elimina un comentario específico
-   * @param {string} id - ID del comentario a eliminar
+   * Deletes a specific comment
+   * @param {string} id - ID of the comment to delete
+   * @returns {Promise<void>} Promise that resolves when the comment is deleted
    */
   const handleDeleteComment = async (id: string): Promise<void> => {
     try {
       await api.comments.remove(id);
       setComments(comments.filter(c => c._id !== id));
     } catch (error) {
-      console.error("Error al eliminar comentario:", error);
+      console.error("Error deleting comment:", error);
     }
   };
 
   /**
-   * Prepara la interfaz para editar un comentario
-   * @param {Comment} comment - Comentario a editar
+   * Prepares the interface for editing a comment
+   * @param {Comment} comment - The comment to edit
    */
   const handleEditComment = (comment: Comment): void => {
     setEditingCommentId(comment._id);
@@ -407,27 +408,28 @@ const Pexels: React.FC = () => {
   };
 
   /**
-   * Actualiza el contenido de un comentario existente
-   * @param {string} id - ID del comentario a actualizar
+   * Updates the content of an existing comment
+   * @param {string} id - ID of the comment to update
+   * @returns {Promise<void>} Promise that resolves when the comment is updated
    */
   const handleUpdateComment = async (id: string): Promise<void> => {
     if (!editContent.trim()) return;
 
     try {
       const updated = await api.comments.update(id, { content: editContent.trim() });
-      // Preservar la información del usuario del comentario original
+      // Preserve the user information from the original comment
       const originalComment = comments.find(c => c._id === id);
       if (originalComment) {
         const updatedWithUser = {
           ...updated,
-          user: originalComment.user // Mantener la info del usuario original
+          user: originalComment.user // Keep original user info
         };
         setComments(comments.map(c => (c._id === id ? updatedWithUser : c)));
       }
       setEditingCommentId(null);
       setEditContent("");
     } catch (error) {
-      console.error("❌ Error al actualizar comentario:", error);
+      console.error("❌ Error updating comment:", error);
     }
   };
 

@@ -68,24 +68,24 @@ export const api = {
     healthCheck: () => http("/api/pexels/"),
   },
 
-  /** Métodos para gestionar videos favoritos del usuario */
+  /** Methods for managing user's favorite videos */
   favorites: {
     /**
-     * Obtiene todos los videos favoritos del usuario actual
-     * @returns {Promise<Array<{id: string, title: string, url: string, thumbnail: string}>>} Lista de videos favoritos
+     * Retrieves all favorite videos for the current user
+     * @returns {Promise<Array<{id: string, title: string, url: string, thumbnail: string}>>} List of favorite videos
      */
     async getAll() {
       return http("/api/favorites");
     },
 
     /**
-     * Añade un video a favoritos
-     * @param {Object} video - Información del video a añadir
-     * @param {string} video.id - ID único del video
-     * @param {string} video.title - Título del video
-     * @param {string} video.url - URL del video
-     * @param {string} video.thumbnail - URL de la miniatura del video
-     * @returns {Promise<{id: string, success: boolean}>} Resultado de la operación
+     * Adds a video to favorites
+     * @param {Object} video - Information about the video to add
+     * @param {string} video.id - Unique identifier of the video
+     * @param {string} video.title - Title of the video
+     * @param {string} video.url - URL of the video
+     * @param {string} video.thumbnail - URL of the video thumbnail
+     * @returns {Promise<{id: string, success: boolean}>} Operation result
      */
     async add(video: { id: string; title: string; url: string; thumbnail: string }) {
       return http("/api/favorites", {
@@ -95,9 +95,9 @@ export const api = {
     },
 
     /**
-     * Elimina un video de favoritos
-     * @param {string} id - ID del video a eliminar de favoritos
-     * @returns {Promise<{success: boolean}>} Resultado de la operación
+     * Removes a video from favorites
+     * @param {string} id - ID of the video to remove from favorites
+     * @returns {Promise<{success: boolean}>} Operation result
      */
     async remove(id: string) {
       return http(`/api/favorites/${id}`, {
@@ -106,39 +106,39 @@ export const api = {
     },
   },
 
-  /** Métodos para gestionar comentarios en videos */
+  /** Methods for managing video comments */
   comments: {
     /**
-     * Obtiene todos los comentarios de un video específico
-     * @param {string} videoId - ID del video del cual obtener los comentarios
-     * @returns {Promise<Array<{id: string, content: string, userId: string, createdAt: string}>>} Lista de comentarios
+     * Retrieves all comments for a specific video
+     * @param {string} videoId - ID of the video to get comments from
+     * @returns {Promise<Array<{id: string, content: string, userId: string, createdAt: string}>>} List of comments
      */
     getByVideo: (videoId: string) => http(`/api/comments/${videoId}`),
 
     /**
-     * Añade un nuevo comentario a un video
-     * @param {Object} data - Datos del comentario
-     * @param {string} data.videoId - ID del video a comentar
-     * @param {string} data.content - Contenido del comentario
-     * @returns {Promise<{id: string, content: string, userId: string, createdAt: string}>} Comentario creado
+     * Adds a new comment to a video
+     * @param {Object} data - Comment data
+     * @param {string} data.videoId - ID of the video to comment on
+     * @param {string} data.content - Content of the comment
+     * @returns {Promise<{id: string, content: string, userId: string, createdAt: string}>} Created comment
      */
     add: (data: { videoId: string; content: string }) =>
       http(`/api/comments`, { method: "POST", body: JSON.stringify(data) }),
 
     /**
-     * Actualiza un comentario existente
-     * @param {string} id - ID del comentario a actualizar
-     * @param {Object} data - Nuevos datos del comentario
-     * @param {string} data.content - Nuevo contenido del comentario
-     * @returns {Promise<{id: string, content: string, userId: string, updatedAt: string}>} Comentario actualizado
+     * Updates an existing comment
+     * @param {string} id - ID of the comment to update
+     * @param {Object} data - New comment data
+     * @param {string} data.content - New content for the comment
+     * @returns {Promise<{id: string, content: string, userId: string, updatedAt: string}>} Updated comment
      */
     update: (id: string, data: { content: string }) =>
       http(`/api/comments/${id}`, { method: "PUT", body: JSON.stringify(data) }),
 
     /**
-     * Elimina un comentario
-     * @param {string} id - ID del comentario a eliminar
-     * @returns {Promise<{success: boolean}>} Resultado de la operación
+     * Deletes a comment
+     * @param {string} id - ID of the comment to delete
+     * @returns {Promise<{success: boolean}>} Operation result
      */
     remove: (id: string) =>
       http(`/api/comments/${id}`, { method: "DELETE" }),
