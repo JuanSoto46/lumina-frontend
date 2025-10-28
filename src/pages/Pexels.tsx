@@ -433,6 +433,75 @@ const Pexels: React.FC = () => {
     }
   };
 
+  /**
+   * User's personal rating for the selected video (1-5).
+   * Stored locally to reflect the UI state immediately after the user interacts.
+   * @type {number}
+   */
+  const [userRating, setUserRating] = useState<number>(0);
+
+  /**
+   * Average rating for the selected video across all users.
+   * Displayed in the modal as the current aggregated score.
+   * @type {number}
+   */
+  const [averageRating, setAverageRating] = useState<number>(0);
+
+  /**
+   * Load ratings when a video is selected (modal opens). This effect fetches both:
+   *  - the average rating for the video
+   *  - the current user's rating for the video
+   * Results are stored in `averageRating` and `userRating` respectively.
+   */
+  useEffect(() => {
+    if (selectedVideo) {
+      api.ratings.getAverage(selectedVideo.id.toString())
+        .then((res) => setAverageRating(res.average))
+        .catch((err) => console.error("Error fetching rating:", err));
+
+      // fetch current user's rating for this video
+      api.ratings.getUserRating(selectedVideo.id.toString())
+        .then((res) => setUserRating(res.rating))
+        .catch((err) => console.error("Error fetching user rating:", err));
+    }
+  }, [selectedVideo]);
+
+  /**
+   * Submit a user rating for the selected video.
+   * This function updates the UI optimistically (sets `userRating` immediately),
+   * then sends the rating to the server and refreshes the average rating.
+   * @param {number} value - Rating value between 1 and 5
+   * @returns {Promise<void>}
+   */
+  const handleRating = async (value: number): Promise<void> => {
+    if (!selectedVideo) return;
+    try {
+      // Optimistic UI update
+      setUserRating(value);
+      await api.ratings.rateVideo(selectedVideo.id.toString(), value);
+      const res = await api.ratings.getAverage(selectedVideo.id.toString());
+      setAverageRating(res.average);
+    } catch (err) {
+      console.error("Error submitting rating:", err);
+    }
+  };
+
+  /**
+   * Remove the current user's rating for the selected video.
+   * After deletion, resets local `userRating` to 0 and refreshes the average rating.
+   * @returns {Promise<void>}
+   */
+  const handleRemoveRating = async (): Promise<void> => {
+    if (!selectedVideo) return;
+    try {
+      await api.ratings.removeUserRating(selectedVideo.id.toString());
+      setUserRating(0);
+      const res = await api.ratings.getAverage(selectedVideo.id.toString());
+      setAverageRating(res.average);
+    } catch (err) {
+      console.error("Error removing rating:", err);
+    }
+  };
 
   return (
     <div className="pexels-page">
@@ -606,6 +675,46 @@ const Pexels: React.FC = () => {
                 </a>
               </div>
             </div>
+
+            {/* ⭐ Sistema de calificación */}
+            <div className="rating-section">
+              <div className="average-rating">
+                <h3>⭐ Calificación promedio</h3>
+                <p className="average-value">{averageRating.toFixed(1)} / 5</p>
+              </div>
+
+              <hr className="rating-divider" />
+
+              <div className="user-rating">
+                <h3>Tu calificación</h3>
+                <div className="stars">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => handleRating(star)}
+                      style={{
+                        cursor: "pointer",
+                        color: userRating >= star ? "#ffd700" : "#555",
+                        fontSize: "1.8rem",
+                        marginRight: "5px",
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
+                {userRating > 0 && (
+                  <button
+                    className="remove-rating-btn"
+                    onClick={() => handleRemoveRating()}
+                  >
+                    Quitar calificación ✖
+                  </button>
+                )}
+              </div>
+            </div>
+
 
             {/* 🗨️ Sección de comentarios */}
             <div className="comments-section">

@@ -143,4 +143,50 @@ export const api = {
     remove: (id: string) =>
       http(`/api/comments/${id}`, { method: "DELETE" }),
   },
+
+  ratings: {
+    /**
+     * Methods for managing video ratings
+     */
+    /**
+     * Submit a rating for a video by the current user.
+     * @param {string} videoId - ID of the video being rated
+     * @param {number} rating - Rating value (1-5)
+     * @returns {Promise<any>} Server response (usually contains success flag or the saved rating)
+     */
+    async rateVideo(videoId: string, rating: number) {
+      return http("/api/ratings", {
+        method: "POST",
+        body: JSON.stringify({ videoId, rating }),
+      });
+    },
+
+    /**
+     * Get the average rating for a video across all users.
+     * @param {string} videoId - ID of the video
+     * @returns {Promise<{average: number}>} Object with `average` field (number)
+     */
+    async getAverage(videoId: string) {
+      return http(`/api/ratings/${videoId}`);
+    },
+
+    /**
+     * Get the current user's rating for a given video.
+     * @param {string} videoId - ID of the video
+     * @returns {Promise<{rating: number}>} Object with `rating` field (number, 0 if none)
+     */
+    async getUserRating(videoId: string) { 
+      return http(`/api/ratings/${videoId}/user`);
+    },
+
+    /**
+     * Remove the current user's rating for a video.
+     * @param {string} videoId - ID of the video
+     * @returns {Promise<any>} Server response (usually success flag)
+     */
+    async removeUserRating(videoId: string) { 
+      return http(`/api/ratings/${videoId}`, { method: "DELETE" });
+    },
+  },
+
 };
