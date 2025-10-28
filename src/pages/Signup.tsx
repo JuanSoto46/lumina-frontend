@@ -1,7 +1,7 @@
 /* The code snippet is importing necessary modules and functions for a React component. */
 import React, { useState, useEffect } from "react";
 import { api } from "../services/api";
-import PasswordField from "../components/PasswordField";
+
 /**
  * The `Signup` function in TypeScript React handles user registration by capturing personal
  * information and access credentials, performing validation checks, and displaying relevant messages
@@ -14,6 +14,8 @@ import PasswordField from "../components/PasswordField";
  * object with the updated value for the specified key.
  */
 export default function Signup() {
+  /* The code snippet is using the `useState` hook from React to create two state variables within the
+  `Signup` component: */
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -25,51 +27,60 @@ export default function Signup() {
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState<"success" | "error" | "info">("info");
 
-  const mismatch =
-    form.password.length > 0 &&
-    form.confirmPassword.length > 0 &&
-    form.password !== form.confirmPassword;
-
-  function validatePasswordStrength(password: string): string | null {
-    if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres.";
-    const weak = ["123456","password","qwerty","abc123","12345678","123456789","111111","password1","123123","contraseña"];
-    if (weak.includes(password.toLowerCase())) return "La contraseña es muy común. Elige otra.";
-    const strong = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]|;:"<>,.?/~`]).+$/;
-    if (!strong.test(password)) return "Incluye al menos una mayúscula, un número y un símbolo.";
-    return null;
-  }
-
+  /* The `useEffect` hook in the provided code snippet is used to add a CSS class to the `body` element
+  of the document when the `Signup` component mounts, and then remove that class when the component
+  unmounts. */
   useEffect(() => {
     document.body.classList.add("login-page");
     return () => document.body.classList.remove("login-page");
   }, []);
 
+  /**
+   * The function `set` updates a specific key-value pair in an object using TypeScript and React.
+   * @param {K} k - The parameter `k` is a key of the `form` object.
+   * @param {any} v - The parameter `v` in the `set` function represents the value that you want to set
+   * for a specific key in the `form` object.
+   */
   function set<K extends keyof typeof form>(k: K, v: any) {
     setForm({ ...form, [k]: v });
   }
 
+  /**
+   * The function onSubmit handles form submission in a TypeScript React component, performing
+   * validation checks and calling an API to sign up a user.
+   * @param e - The parameter `e` in the `onSubmit` function is a React.FormEvent. It is an event
+   * object that represents a form submission event in React. In this case, the function is handling
+   * the form submission event to validate the form data before sending it to the server for signup.
+   * @returns The `onSubmit` function is returning different messages based on the conditions met
+   * during form submission. If the user's age is less than 18, it returns a message stating "You must
+   * be at least 18 years old to register." If the passwords do not match, it returns a message saying
+   * "The passwords do not match." If the signup process is successful, it returns "Account created.
+   */
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const ageNum = Number(form.age);
-    if (isNaN(ageNum) || ageNum < 18) {
+
+    if (Number(form.age) < 18 || isNaN(Number(form.age))) {
       setMsg("Debes tener al menos 18 años para registrarte.");
       setMsgType("error");
       return;
     }
+
     if (form.password !== form.confirmPassword) {
       setMsg("Las contraseñas no coinciden.");
       setMsgType("error");
       return;
     }
-    const err = validatePasswordStrength(form.password);
-    if (err) { setMsg(err); setMsgType("error"); return; }
 
     try {
-      await api.signup({ ...form, age: ageNum });
+      const formData = {
+        ...form,
+        age: Number(form.age) // Convertir age a número para la API
+      };
+      await api.signup(formData);
       setMsg("Cuenta creada. Ahora puedes iniciar sesión.");
       setMsgType("success");
     } catch (e: any) {
-      setMsg(e?.message || "Error al crear la cuenta.");
+      setMsg(e.message || "Error al crear la cuenta.");
       setMsgType("error");
     }
   }
@@ -79,7 +90,11 @@ export default function Signup() {
       <section className="login-card signup-card">
         <header className="login-logo">
           <div className="logo-circle">
-            <img src="/Lumina.png" alt="Logo de Lumina" className="logo-image"/>
+            <img
+              src="/Lumina.png"
+              alt="Logo de Lumina"
+              className="logo-image"
+            />
           </div>
         </header>
 
@@ -124,7 +139,12 @@ export default function Signup() {
                 min={18}
                 value={form.age}
                 onChange={(e) => set("age", e.target.value)}
-                onFocus={() => { if (form.age === "" || form.age === "0") set("age",""); }}
+                onFocus={(e) => {
+                  // Si el campo está vacío o es "0", limpiar al hacer foco
+                  if (form.age === "" || form.age === "0") {
+                    set("age", "");
+                  }
+                }}
                 placeholder="Edad (mínimo 18 años)"
                 required
                 aria-required="true"
@@ -146,43 +166,39 @@ export default function Signup() {
                 required
                 aria-required="true"
                 className="login-input"
-                autoComplete="email"
               />
             </div>
 
             <div className="input-group">
-              <PasswordField
+              <label htmlFor="password" className="sr-only">Contraseña</label>
+              <input
                 id="password"
-                label="Contraseña"
-                className="login-input"
-                required
+                type="password"
                 value={form.password}
                 onChange={(e) => set("password", e.target.value)}
-                autoComplete="new-password"
+                placeholder="Contraseña"
+                required
+                aria-required="true"
+                className="login-input"
               />
             </div>
 
             <div className="input-group">
-              <PasswordField
+              <label htmlFor="confirmPassword" className="sr-only">Confirmar contraseña</label>
+              <input
                 id="confirmPassword"
-                label="Confirmar contraseña"
-                className="login-input"
-                required
+                type="password"
                 value={form.confirmPassword}
                 onChange={(e) => set("confirmPassword", e.target.value)}
-                autoComplete="new-password"
+                placeholder="Confirmar contraseña"
+                required
+                aria-required="true"
+                className="login-input"
               />
-              {mismatch && (
-                <p className="login-message error" role="alert">
-                  Las contraseñas no coinciden.
-                </p>
-              )}
             </div>
           </section>
 
-          <button type="submit" className="login-button" disabled={mismatch}>
-            Crear cuenta
-          </button>
+          <button type="submit" className="login-button">Crear cuenta</button>
         </form>
 
         <nav className="login-links">

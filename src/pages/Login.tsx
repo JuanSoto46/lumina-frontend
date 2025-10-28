@@ -7,11 +7,9 @@
  */
 
 // src/pages/Login.tsx
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
-// Si NO tienes alias "@", cambia esta línea por: import PasswordField from "../components/PasswordField";
-import PasswordField from "../components/PasswordField";
 
 type Props = { onAuth?: () => void };
 
@@ -31,7 +29,7 @@ export default function Login({ onAuth }: Props) {
       setMsgType("success");
       navigate("/pexels");
     } catch (e: any) {
-      setMsg(e?.message || "Error al iniciar sesión.");
+      setMsg(e.message || "Error al iniciar sesión.");
       setMsgType("error");
     }
   }
@@ -46,8 +44,8 @@ export default function Login({ onAuth }: Props) {
       <section className="login-card" aria-describedby="login-description">
         <div className="login-logo">
           <div className="logo-circle">
-  <img src="/Lumina.png" alt="Logo Lumina" className="logo-image" />
-</div>
+            <img src="/Lumina.png" alt="Logo de Lumina" className="logo-image" />
+          </div>
         </div>
 
         <h1 id="login-title" className="label">Iniciar sesión en Lumina</h1>
@@ -67,19 +65,20 @@ export default function Login({ onAuth }: Props) {
               required
               className="login-input"
               aria-required="true"
-              autoComplete="username"
             />
           </div>
 
           <div className="input-group">
-            {/* Sustituye el input viejo por el PasswordField con ojito */}
-            <PasswordField
+            <label htmlFor="password" className="label">Contraseña</label>
+            <input
               id="password"
-              label="Contraseña"
-              required
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              required
               className="login-input"
+              aria-required="true"
             />
           </div>
 
@@ -91,7 +90,8 @@ export default function Login({ onAuth }: Props) {
         <nav className="login-links" aria-label="Enlaces de ayuda">
           <Link to="/forgot" className="forgot-link">¿Olvidaste tu contraseña?</Link>
           <p className="signup-text">
-            ¿No tienes una cuenta? <Link to="/signup" className="signup-link">Regístrate aquí</Link>
+            ¿No tienes una cuenta?{" "}
+            <Link to="/signup" className="signup-link">Regístrate aquí</Link>
           </p>
         </nav>
 
