@@ -85,17 +85,34 @@ interface PexelsResponse {
  */
 const Pexels: React.FC = () => {
   console.log('Pexels component rendering...');
-  
+
   // Verify authentication
   const isAuthenticated = !!localStorage.getItem("token");
-  
+
   const [videos, setVideos] = useState<PexelsVideo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('nature');
   const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
+  const [savingFavorite, setSavingFavorite] = useState<number | null>(null); // 👈 aquí va
+
+  // 🔥 Cargar favoritos del usuario cuando se monta el componente
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const favorites = await api.favorites.getAll(); // GET /favorites
+        const favoriteIds = favorites.map((f: any) => parseInt(f.id, 10)); // ids en número
+        setLikedVideos(new Set(favoriteIds)); // sincroniza el estado local con los del backend
+        console.log("❤️ Favoritos cargados:", favoriteIds);
+      } catch (err) {
+        console.error("❌ Error al cargar favoritos:", err);
+      }
+    };
+
+    loadFavorites();
+  }, []);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -136,8 +153,7 @@ const Pexels: React.FC = () => {
       console.log('Calling API for popular videos...');
       const data: PexelsVideo[] = await api.pexels.getPopularVideos();
       console.log('API response received:', data);
-      // Mostrar los primeros 18 videos populares
-      setVideos(data.slice(0, 18));
+      setVideos(data);
     } catch (err) {
       console.error('Error loading popular videos:', err);
       setError(err instanceof Error ? err.message : 'Error al cargar videos populares');
@@ -153,15 +169,14 @@ const Pexels: React.FC = () => {
    */
   const searchVideos = async (query: string, terms?: string) => {
     if (!query.trim() && !terms?.trim()) return;
-    
+
     setLoading(true);
     setError(null);
     try {
       console.log('Searching videos with query:', query, 'terms:', terms);
-      const data: PexelsResponse = await api.pexels.searchVideos(query, terms, 18);
+      const data: PexelsResponse = await api.pexels.searchVideos(query, terms, 20);
       console.log('Search response received:', data);
-      // Ya solicitamos 18, pero por seguridad limitamos también aquí
-      setVideos(data.videos.slice(0, 18));
+      setVideos(data.videos);
     } catch (err) {
       console.error('Error searching videos:', err);
       setError(err instanceof Error ? err.message : 'Error al buscar videos');
@@ -218,11 +233,11 @@ const Pexels: React.FC = () => {
    */
   const getBestVideoFile = (videoFiles?: Array<any>) => {
     if (!videoFiles || videoFiles.length === 0) return null;
-    
+
     // Prefer HD quality, then SD, then any other
     const hd = videoFiles.find(file => file.quality === 'hd');
     const sd = videoFiles.find(file => file.quality === 'sd');
-    
+
     return hd || sd || videoFiles[0];
   };
 
@@ -242,19 +257,66 @@ const Pexels: React.FC = () => {
    * @param {number} videoId - The ID of the video to toggle
    * @param {React.MouseEvent} e - The click event
    */
-  const toggleLike = (videoId: number, e: React.MouseEvent) => {
+  const toggleLike = async (videoId: number, e: React.MouseEvent) => {
     e.stopPropagation();
+
+    const alreadyLiked = likedVideos.has(videoId);
+
+    // Update the heart visually immediately
     setLikedVideos(prev => {
       const newLiked = new Set(prev);
-      if (newLiked.has(videoId)) {
-        newLiked.delete(videoId);
-      } else {
-        newLiked.add(videoId);
-      }
+      if (alreadyLiked) newLiked.delete(videoId);
+      else newLiked.add(videoId);
       return newLiked;
     });
+
+    if (alreadyLiked) {
+      await removeFromFavorites(videoId);
+    } else {
+      await addToFavorites(videoId);
+    }
   };
 
+
+  /**
+   * Adds a video to user's favorites in backend
+   */
+  const addToFavorites = async (videoId: number) => {
+    if (savingFavorite === videoId) return; // 🚫 evita doble petición
+    setSavingFavorite(videoId);
+
+    const video = videos.find(v => v.id === videoId);
+    if (!video) return;
+
+    // ✅ Obtener el archivo de video reproducible (.mp4)
+    const bestFile = getBestVideoFile(video.video_files);
+
+    try {
+      await api.favorites.add({
+        id: video.id.toString(),
+        title: `Video por ${video.user.name}`,
+        url: bestFile?.link || video.video_files[0]?.link,
+        thumbnail: video.image,
+      });
+      console.log("✅ Added to favorites");
+    } catch (err) {
+      console.error("❌ Error adding to favorites:", err);
+    } finally {
+      setSavingFavorite(null);
+    }
+  };
+
+  /**
+   * Removes a video from user's favorites in backend
+   */
+  const removeFromFavorites = async (videoId: number) => {
+    try {
+      await api.favorites.remove(videoId.toString());
+      console.log("🗑️ Removed from favorites");
+    } catch (err) {
+      console.error("❌ Error removing from favorites:", err);
+    }
+  };
   /**
    * Checks if a video is liked
    * @param {number} videoId - The ID of the video to check
@@ -264,13 +326,121 @@ const Pexels: React.FC = () => {
     return likedVideos.has(videoId);
   };
 
+  /** Interface for the structure of a comment */
+  interface Comment {
+    _id: string;
+    content: string;
+    user: {
+      _id: string;
+      firstName: string;
+    };
+    videoId: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  /** State for the current video's comment list */
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  /** State for the new comment being written */
+  const [newComment, setNewComment] = useState("");
+
+  /** ID of the comment being edited, null if no active edit */
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+
+  /** Temporary content while editing a comment */
+  const [editContent, setEditContent] = useState("");
+
+  /** 
+   * Effect to load comments when a video is selected
+   * Executes every time selectedVideo changes
+   */
+  useEffect(() => {
+    if (selectedVideo) {
+      api.comments.getByVideo(selectedVideo.id.toString())
+        .then(setComments)
+        .catch(error => {
+          console.error("Error loading comments:", error);
+        });
+    }
+  }, [selectedVideo]);
+
+  /**
+   * Adds a new comment to the current video
+   * @returns {Promise<void>} Promise that resolves when the comment is added
+   */
+  const handleAddComment = async (): Promise<void> => {
+    if (!newComment.trim() || !selectedVideo) return;
+
+    try {
+      const comment = await api.comments.add({
+        videoId: selectedVideo.id.toString(),
+        content: newComment.trim()
+      });
+      setComments([comment, ...comments]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  /**
+   * Deletes a specific comment
+   * @param {string} id - ID of the comment to delete
+   * @returns {Promise<void>} Promise that resolves when the comment is deleted
+   */
+  const handleDeleteComment = async (id: string): Promise<void> => {
+    try {
+      await api.comments.remove(id);
+      setComments(comments.filter(c => c._id !== id));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  /**
+   * Prepares the interface for editing a comment
+   * @param {Comment} comment - The comment to edit
+   */
+  const handleEditComment = (comment: Comment): void => {
+    setEditingCommentId(comment._id);
+    setEditContent(comment.content);
+  };
+
+  /**
+   * Updates the content of an existing comment
+   * @param {string} id - ID of the comment to update
+   * @returns {Promise<void>} Promise that resolves when the comment is updated
+   */
+  const handleUpdateComment = async (id: string): Promise<void> => {
+    if (!editContent.trim()) return;
+
+    try {
+      const updated = await api.comments.update(id, { content: editContent.trim() });
+      // Preserve the user information from the original comment
+      const originalComment = comments.find(c => c._id === id);
+      if (originalComment) {
+        const updatedWithUser = {
+          ...updated,
+          user: originalComment.user // Keep original user info
+        };
+        setComments(comments.map(c => (c._id === id ? updatedWithUser : c)));
+      }
+      setEditingCommentId(null);
+      setEditContent("");
+    } catch (error) {
+      console.error("❌ Error updating comment:", error);
+    }
+  };
+
+
   return (
     <div className="pexels-page">
       <div className="container">
         <header className="pexels-header">
-          <h1>Videos de Lumina</h1>
-          <p>Los mejores videos populares de alta calidad</p>
-          
+          <h1>Videos de Pexels</h1>
+          <p>Descubre videos gratuitos de alta calidad</p>
+
           <form onSubmit={handleSearch} className="search-form">
             <div className="search-input-group">
               <input
@@ -287,28 +457,28 @@ const Pexels: React.FC = () => {
           </form>
 
           <div className="quick-actions">
-            <button 
+            <button
               onClick={loadPopularVideos}
               className="quick-action-btn"
               disabled={loading}
             >
               Videos Populares
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('nature')}
               className="quick-action-btn"
               disabled={loading}
             >
               Naturaleza
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('technology')}
               className="quick-action-btn"
               disabled={loading}
             >
               Tecnología
             </button>
-            <button 
+            <button
               onClick={() => searchVideos('city')}
               className="quick-action-btn"
               disabled={loading}
@@ -344,7 +514,7 @@ const Pexels: React.FC = () => {
                   </div>
                 </div>
                 <div className="info-right">
-                  <button 
+                  <button
                     className={`simple-heart ${isLiked(video.id) ? 'liked' : ''}`}
                     onClick={(e) => toggleLike(video.id, e)}
                     aria-label={isLiked(video.id) ? 'Quitar me gusta' : 'Me gusta'}
@@ -366,7 +536,7 @@ const Pexels: React.FC = () => {
 
         {videos.length === 0 && !loading && !error && (
           <div className="no-results">
-            <p>No se encontraron videos. Prueba con los botones de búsqueda rápida o busca algo diferente.</p>
+            <p>No se encontraron videos. Intenta con otra búsqueda.</p>
           </div>
         )}
       </div>
@@ -379,7 +549,7 @@ const Pexels: React.FC = () => {
               <h2>Video por {selectedVideo.user.name}</h2>
               <button className="close-button" onClick={closeModal}>×</button>
             </div>
-            
+
             <div className="video-player">
               {getBestVideoFile(selectedVideo.video_files) ? (
                 <video
@@ -389,9 +559,9 @@ const Pexels: React.FC = () => {
                   className="video-element"
                   poster={selectedVideo.image}
                 >
-                  <source 
-                    src={getBestVideoFile(selectedVideo.video_files)?.link} 
-                    type="video/mp4" 
+                  <source
+                    src={getBestVideoFile(selectedVideo.video_files)?.link}
+                    type="video/mp4"
                   />
                   Tu navegador no soporta el elemento video.
                 </video>
@@ -405,7 +575,7 @@ const Pexels: React.FC = () => {
             <div className="video-details">
               <p><strong>Duración:</strong> {formatDuration(selectedVideo.duration)}</p>
               <p><strong>Dimensiones:</strong> {selectedVideo.width}x{selectedVideo.height}</p>
-              
+
               {selectedVideo.video_files && selectedVideo.video_files.length > 0 && (
                 <div className="quality-options">
                   <p><strong>Calidades disponibles:</strong></p>
@@ -426,15 +596,57 @@ const Pexels: React.FC = () => {
               )}
 
               <div className="external-link">
-                <a 
-                  href={selectedVideo.url} 
-                  target="_blank" 
+                <a
+                  href={selectedVideo.url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="pexels-link"
                 >
                   Ver en Pexels ↗
                 </a>
               </div>
+            </div>
+
+            {/* 🗨️ Sección de comentarios */}
+            <div className="comments-section">
+              <h3>Comentarios</h3>
+
+              <div className="add-comment">
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Escribe un comentario..."
+                />
+                <button onClick={handleAddComment}>Enviar</button>
+              </div>
+
+              <ul className="comments-list">
+                {comments.map((c) => (
+                  <li key={c._id}>
+                    <p><strong>{c.user.firstName}:</strong></p>
+
+                    {editingCommentId === c._id ? (
+                      <div className="edit-comment">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                        />
+                        <button onClick={() => handleUpdateComment(c._id)}>💾 Guardar</button>
+                        <button onClick={() => setEditingCommentId(null)}>❌ Cancelar</button>
+                      </div>
+                    ) : (
+                      <p>{c.content}</p>
+                    )}
+
+                    {c.user._id === JSON.parse(atob(localStorage.getItem("token")!.split(".")[1])).id && (
+                      <div className="comment-actions">
+                        <button onClick={() => handleEditComment(c)}>✏️</button>
+                        <button onClick={() => handleDeleteComment(c._id)}>🗑️</button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
