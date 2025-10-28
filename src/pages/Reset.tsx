@@ -21,32 +21,21 @@ export default function Reset() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     if (!token) {
       setMsg("Falta token. Abre el enlace desde tu correo nuevamente.");
       setMsgType("error");
       return;
     }
-
     if (password.length < 6) {
       setMsg("La contraseña debe tener al menos 6 caracteres.");
       setMsgType("error");
       return;
     }
-
-    // 🔒 Nueva validación: evitar contraseñas débiles
-    const weakPasswords = ["123456", "password", "qwerty", "abc123"];
-    if (weakPasswords.includes(password.toLowerCase())) {
-      setMsg("La contraseña es demasiado común. Elige otra.");
-      return;
-    }
-
     if (password !== confirm) {
       setMsg("Las contraseñas no coinciden.");
       setMsgType("error");
       return;
     }
-
     try {
       await api.reset(token, password, confirm); // api.reset(token, password, confirmPassword)
       setMsg("Contraseña actualizada. Redirigiendo al inicio de sesión…");
