@@ -1,7 +1,7 @@
 /* The code you provided is importing various modules and components needed for a React application.
 Here is a breakdown of each import statement: */
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -11,8 +11,10 @@ import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
 import Pexels from "./pages/Pexels";
 import Favorites from "./pages/Favorites";
+import UserManual from "./pages/UserManual";
 import Footer from "./components/Footer";
 import Header from "./components/Header";                
+import Sidebar from "./components/Sidebar";
 import ChangePassword from "./pages/ChangePassword";
 import { api } from "./services/api";
 
@@ -24,7 +26,9 @@ function AppContent() {
   /* The line `const [authed, setAuthed] = useState<boolean>(!!localStorage.getItem("token"));` in the
   `App` function is initializing a state variable `authed` using the `useState` hook in React. */
   const [authed, setAuthed] = useState<boolean>(!!localStorage.getItem("token"));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   /* The `useEffect` hook in the provided code snippet is used to set up a listener for changes in the
   browser's `localStorage` object. Here's a breakdown of what it's doing: */
@@ -81,28 +85,80 @@ function AppContent() {
   function logout() {
     api.logout();
     setAuthed(false);
+    setSidebarOpen(false);
+    // Redirigir a la página de inicio después del logout
+    navigate('/');
   }
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
+  // Componente para proteger rutas que requieren autenticación
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    React.useEffect(() => {
+      if (!authed) {
+        navigate('/');
+      }
+    }, [authed]);
+
+    return authed ? <>{children}</> : null;
+  };
+
   return (
-    <>
-      <Header authed={authed} onLogout={logout} />
-      <main className="container">
+    <div className={`app ${authed && sidebarOpen ? 'sidebar-open' : ''}`}>
+      <Header 
+        authed={authed} 
+        onLogout={logout} 
+        onToggleSidebar={authed ? toggleSidebar : undefined}
+      />
+      
+      {authed && (
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          onClose={closeSidebar} 
+          onLogout={logout}
+        />
+      )}
+      
+      <main className={`container ${authed ? 'main-content-with-sidebar' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          {authed && <Route path="/pexels" element={<Pexels />} />}
-          {authed && <Route path="/favorites" element={<Favorites />} />}
+          <Route path="/user-manual" element={<UserManual />} />
+          <Route path="/pexels" element={
+            <ProtectedRoute>
+              <Pexels />
+            </ProtectedRoute>
+          } />
+          <Route path="/favorites" element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          } />
           <Route path="/login" element={<Login onAuth={() => setAuthed(true)} />} />
           <Route path="/signup" element={<Signup />} />
-          {authed && <Route path="/profile" element={<Profile />} />}
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
           <Route path="/forgot" element={<Forgot />} />
           <Route path="/reset" element={<Reset />} />
-          {authed && <Route path="/settings/password" element={<ChangePassword />} />}
+          <Route path="/settings/password" element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<div>Página no encontrada</div>} />
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
