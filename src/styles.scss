@@ -2861,3 +2861,117 @@ body.login-page .login-container {
 .main-content-with-sidebar {
   transition: margin-left 0.3s ease;
 }
+
+
+/* === ⭐ Rating Stars === */
+.rating-section{
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 1rem;
+
+  .stars {
+    font-size: 1.8rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.25s ease, transform 0.2s ease;
+
+    &:hover {
+      color: #ffd700;
+      transform: scale(1.1);
+    }
+
+    &.active {
+      color: #ffcc00;
+    }
+  }
+
+  /* Animación al hacer click */
+  .stars:active {
+    transform: scale(0.9);
+  }
+
+  
+}
+
+/* Efecto de brillo en hover */
+.rating-container:hover .star.active {
+  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
+}
+
+/* Modo oscuro integrado */
+@media (prefers-color-scheme: dark) {
+  .rating-container {
+    .star {
+      color: #666;
+
+      &.active {
+        color: #ffda44;
+      }
+    }
+  }
+}
+
+.rating-section {
+  display: flex;
+  flex-direction: column; // 👈 fuerza el apilado vertical
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+
+  .average-rating {
+    margin-bottom: 1rem;
+
+    h3 {
+      color: #e6e6e6;
+      margin-bottom: 0.3rem;
+    }
+
+    .average-value {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ffd700;
+    }
+  }
+
+  .rating-divider {
+    width: 80%;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+  }
+
+  .user-rating {
+    h3 {
+      color: #e6e6e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      margin-bottom: 0.6rem;
+    }
+
+    .remove-rating-btn {
+      background: transparent;
+      border: 1px solid #f55;
+      color: #f55;
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: #f55;
+        color: #fff;
+      }
+    }
+  }
+}
+
