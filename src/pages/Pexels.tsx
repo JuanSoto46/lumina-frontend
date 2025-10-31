@@ -1,57 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import SubtitleViewer from '../components/SubtitleViewer';
+import VideoSubtitleOverlay from '../components/VideoSubtitleOverlay';
+import { PexelsVideo as PexelsVideoType, VideoSubtitles } from '../types/video.types';
 import '../styles.scss';
-
-/**
- * Represents a video object from the Pexels API
- */
-interface PexelsVideo {
-  /** Unique identifier for the video */
-  id: number;
-  /** Video width in pixels */
-  width: number;
-  /** Video height in pixels */
-  height: number;
-  /** URL to the video page on Pexels */
-  url: string;
-  /** URL to the video thumbnail image */
-  image: string;
-  /** Video duration in seconds */
-  duration: number;
-  /** Information about the video creator */
-  user: {
-    /** User's unique identifier */
-    id: number;
-    /** User's display name */
-    name: string;
-    /** URL to the user's profile on Pexels */
-    url: string;
-  };
-  /** Array of available video files in different qualities */
-  video_files: Array<{
-    /** File unique identifier */
-    id: number;
-    /** Video quality (e.g., 'hd', 'sd') */
-    quality: string;
-    /** File format type */
-    file_type: string;
-    /** Video width for this quality */
-    width: number;
-    /** Video height for this quality */
-    height: number;
-    /** Direct download link to the video file */
-    link: string;
-  }>;
-  /** Array of video preview pictures */
-  video_pictures: Array<{
-    /** Picture unique identifier */
-    id: number;
-    /** URL to the picture */
-    picture: string;
-    /** Picture number in sequence */
-    nr: number;
-  }>;
-}
 
 /**
  * Represents the response structure from Pexels API search endpoints
@@ -62,7 +14,7 @@ interface PexelsResponse {
   /** Number of results per page */
   per_page: number;
   /** Array of video objects */
-  videos: PexelsVideo[];
+  videos: PexelsVideoType[];
   /** Total number of results available */
   total_results: number;
   /** URL to the next page (if available) */
@@ -78,8 +30,9 @@ interface PexelsResponse {
  * - Authentication check and redirect to login if not authenticated
  * - Load and display popular videos on page load
  * - Search functionality for finding specific videos
- * - Video modal for detailed viewing and playback
+ * - Video modal for detailed viewing and playbook
  * - Quick action buttons for common search categories
+ * - Automatic subtitles support
  * 
  * @returns {JSX.Element} The rendered Pexels page component
  */
@@ -89,14 +42,19 @@ const Pexels: React.FC = () => {
   // Verify authentication
   const isAuthenticated = !!localStorage.getItem("token");
 
-  const [videos, setVideos] = useState<PexelsVideo[]>([]);
+  const [videos, setVideos] = useState<PexelsVideoType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('nature');
-  const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedVideo, setSelectedVideo] = useState<PexelsVideoType | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
-  const [savingFavorite, setSavingFavorite] = useState<number | null>(null); // 👈 aquí va
+  const [savingFavorite, setSavingFavorite] = useState<number | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<'es' | 'en'>('es');
+  
+  // Video subtitle overlay states
+  const [showSubtitleOverlay, setShowSubtitleOverlay] = useState(true);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
   // 🔥 Cargar favoritos del usuario cuando se monta el componente
   useEffect(() => {
@@ -130,6 +88,14 @@ const Pexels: React.FC = () => {
     }
   }, [isAuthenticated]);
 
+  // Reload videos when language changes
+  useEffect(() => {
+    if (isAuthenticated && videos.length > 0) {
+      console.log(`Language changed to ${selectedLanguage}, reloading videos...`);
+      loadPopularVideos();
+    }
+  }, [selectedLanguage]);
+
   // Don't render anything if not authenticated
   if (!isAuthenticated) {
     return (
@@ -141,22 +107,47 @@ const Pexels: React.FC = () => {
     );
   }
 
-  /**
-   * Loads popular videos from the Pexels API
-   * Updates the videos state with the fetched data and handles loading/error states
+    /**
+   * Loads popular videos from the backend Pexels API with automatic subtitles
    */
   const loadPopularVideos = async () => {
-    console.log('loadPopularVideos called');
+    console.log(`=== LOADING POPULAR VIDEOS (${selectedLanguage.toUpperCase()}) ===`);
     setLoading(true);
     setError(null);
     try {
-      console.log('Calling API for popular videos...');
-      const data: PexelsVideo[] = await api.pexels.getPopularVideos();
-      console.log('API response received:', data);
+      console.log(`Calling frontend-optimized API for popular videos in ${selectedLanguage}...`);
+      const data: PexelsVideoType[] = await api.pexels.getVideosForFrontend(selectedLanguage);
+      console.log('Frontend API response received:', {
+        videoCount: data.length,
+        language: selectedLanguage,
+        hasSubtitles: data.filter(v => v.hasSubtitles).length,
+        sampleVideo: data[0] ? {
+          id: data[0].id,
+          hasSubtitles: data[0].hasSubtitles,
+          hasAudio: data[0].hasAudio,
+          language: data[0].subtitles?.language,
+          segmentCount: data[0].subtitles?.segments?.length || 0
+        } : null
+      });
       setVideos(data);
     } catch (err) {
       console.error('Error loading popular videos:', err);
-      setError(err instanceof Error ? err.message : 'Error al cargar videos populares');
+      
+      // Traducir mensajes de error al español
+      let errorMessage = 'Error al cargar videos populares';
+      if (err instanceof Error) {
+        if (err.message.includes('network') || err.message.includes('fetch')) {
+          errorMessage = 'Error de conexión. Verifica tu internet e intenta nuevamente.';
+        } else if (err.message.includes('500')) {
+          errorMessage = 'Error del servidor. Intenta nuevamente más tarde.';
+        } else if (err.message.includes('not configured')) {
+          errorMessage = 'Servicio no disponible temporalmente.';
+        } else {
+          errorMessage = `Error al cargar videos: ${err.message}`;
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -173,13 +164,34 @@ const Pexels: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      console.log('Searching videos with query:', query, 'terms:', terms);
-      const data: PexelsResponse = await api.pexels.searchVideos(query, terms, 20);
-      console.log('Search response received:', data);
+      console.log(`Searching videos with query: ${query}, terms: ${terms}, language: ${selectedLanguage}`);
+      const data: PexelsResponse = await api.pexels.searchVideos(query, terms, 20, selectedLanguage);
+      console.log('Search response received:', {
+        videoCount: data.videos.length,
+        language: selectedLanguage,
+        hasSubtitles: data.videos.filter(v => v.hasSubtitles).length
+      });
       setVideos(data.videos);
     } catch (err) {
       console.error('Error searching videos:', err);
-      setError(err instanceof Error ? err.message : 'Error al buscar videos');
+      
+      // Traducir mensajes de error al español
+      let errorMessage = 'Error al buscar videos';
+      if (err instanceof Error) {
+        if (err.message.includes('network') || err.message.includes('fetch')) {
+          errorMessage = 'Error de conexión. Verifica tu internet e intenta nuevamente.';
+        } else if (err.message.includes('500')) {
+          errorMessage = 'Error del servidor. Intenta nuevamente más tarde.';
+        } else if (err.message.includes('not configured')) {
+          errorMessage = 'Servicio de búsqueda no disponible temporalmente.';
+        } else if (err.message.includes('400')) {
+          errorMessage = 'Términos de búsqueda inválidos. Intenta con otras palabras.';
+        } else {
+          errorMessage = `Error en la búsqueda: ${err.message}`;
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -200,13 +212,13 @@ const Pexels: React.FC = () => {
   /**
    * Opens a modal with detailed video information and playback options
    * Attempts to fetch complete video details, falls back to provided video data if fetch fails
-   * @param {PexelsVideo} video - The video object to display in the modal
+   * @param {PexelsVideoType} video - The video object to display in the modal
    */
-  const openVideoModal = async (video: PexelsVideo) => {
+  const openVideoModal = async (video: PexelsVideoType) => {
     try {
       console.log('Opening video modal for:', video.id);
       // Get complete video details
-      const fullVideo: PexelsVideo = await api.pexels.getVideoById(video.id);
+      const fullVideo: PexelsVideoType = await api.pexels.getVideoById(video.id);
       setSelectedVideo(fullVideo);
       setShowModal(true);
     } catch (err) {
@@ -277,6 +289,50 @@ const Pexels: React.FC = () => {
     }
   };
 
+  /**
+   * Reloads the current video with subtitles in the new language
+   */
+  const reloadCurrentVideoWithLanguage = async (newLanguage: 'es' | 'en') => {
+    if (!selectedVideo) return;
+    
+    try {
+      console.log(`Reloading video ${selectedVideo.id} with language: ${newLanguage}`);
+      
+      // Call the API with the new language parameter
+      const updatedVideo = await api.pexels.getVideoById(selectedVideo.id, newLanguage);
+      
+      if (updatedVideo) {
+        console.log('Video reloaded with new subtitles:', {
+          id: updatedVideo.id,
+          language: newLanguage,
+          hasSubtitles: !!updatedVideo.subtitles,
+          subtitleLanguage: updatedVideo.subtitles?.language,
+          segmentCount: updatedVideo.subtitles?.segments?.length || 0
+        });
+        
+        // Update the selected video with new subtitles
+        setSelectedVideo(updatedVideo);
+        
+        // Also update the video in the videos array if it exists there
+        setVideos(prevVideos => 
+          prevVideos.map(video => 
+            video.id === updatedVideo.id ? updatedVideo : video
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error reloading video with new language:', error);
+    }
+  };
+
+  /**
+   * Handles language change in video modal
+   */
+  const handleVideoLanguageChange = (newLanguage: 'es' | 'en') => {
+    setSelectedLanguage(newLanguage);
+    reloadCurrentVideoWithLanguage(newLanguage);
+  };
+
 
   /**
    * Adds a video to user's favorites in backend
@@ -306,6 +362,46 @@ const Pexels: React.FC = () => {
     }
   };
 
+
+  /**
+   * Adds a video to user's favorites in backend
+   */
+  const addToFavorites = async (videoId: number) => {
+    if (savingFavorite === videoId) return; // 🚫 evita doble petición
+    setSavingFavorite(videoId);
+
+    const video = videos.find(v => v.id === videoId);
+    if (!video) return;
+
+    // ✅ Obtener el archivo de video reproducible (.mp4)
+    const bestFile = getBestVideoFile(video.video_files);
+
+    try {
+      await api.favorites.add({
+        id: video.id.toString(),
+        title: `Video por ${video.user.name}`,
+        url: bestFile?.link || video.video_files[0]?.link,
+        thumbnail: video.image,
+      });
+      console.log("✅ Added to favorites");
+    } catch (err) {
+      console.error("❌ Error adding to favorites:", err);
+    } finally {
+      setSavingFavorite(null);
+    }
+  };
+
+  /**
+   * Removes a video from user's favorites in backend
+   */
+  const removeFromFavorites = async (videoId: number) => {
+    try {
+      await api.favorites.remove(videoId.toString());
+      console.log("🗑️ Removed from favorites");
+    } catch (err) {
+      console.error("❌ Error removing from favorites:", err);
+    }
+  };
   /**
    * Removes a video from user's favorites in backend
    */
@@ -616,24 +712,68 @@ const Pexels: React.FC = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Video por {selectedVideo.user.name}</h2>
-              <button className="close-button" onClick={closeModal}>×</button>
+              <div className="header-controls">
+                {selectedVideo.subtitles && selectedVideo.subtitles.segments.length > 0 && (
+                  <button
+                    className={`subtitle-toggle-btn ${showSubtitleOverlay ? 'active' : ''}`}
+                    onClick={() => setShowSubtitleOverlay(!showSubtitleOverlay)}
+                    title={showSubtitleOverlay ? 'Ocultar subtítulos' : 'Mostrar subtítulos'}
+                  >
+                    📝 {showSubtitleOverlay ? 'CC ON' : 'CC OFF'}
+                  </button>
+                )}
+                <button className="close-button" onClick={closeModal}>×</button>
+              </div>
             </div>
 
             <div className="video-player">
               {getBestVideoFile(selectedVideo.video_files) ? (
-                <video
-                  controls
-                  autoPlay
-                  preload="metadata"
-                  className="video-element"
-                  poster={selectedVideo.image}
-                >
-                  <source
-                    src={getBestVideoFile(selectedVideo.video_files)?.link}
-                    type="video/mp4"
-                  />
-                  Tu navegador no soporta el elemento video.
-                </video>
+                <div className="video-container">
+                  <video
+                    ref={videoRef}
+                    controls
+                    autoPlay
+                    preload="metadata"
+                    className="video-element"
+                    poster={selectedVideo.image}
+                  >
+                    <source
+                      src={getBestVideoFile(selectedVideo.video_files)?.link}
+                      type="video/mp4"
+                    />
+                    Tu navegador no soporta el elemento video.
+                  </video>
+                  
+                  {/* Video overlay controls */}
+                  <div className="video-overlay-controls">
+                    {/* Language selector for subtitles */}
+                    <div className="video-language-selector">
+                      <label htmlFor="video-language-select" title="Cambiar idioma de subtítulos">
+                        🌐
+                      </label>
+                      <select
+                        id="video-language-select"
+                        value={selectedLanguage}
+                        onChange={(e) => handleVideoLanguageChange(e.target.value as 'es' | 'en')}
+                        className="video-language-select"
+                        title="Cambiar idioma de subtítulos"
+                      >
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇺🇸 EN</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  {/* Subtitle Overlay */}
+                  {selectedVideo.subtitles && selectedVideo.subtitles.segments.length > 0 && (
+                    <VideoSubtitleOverlay
+                      segments={selectedVideo.subtitles.segments}
+                      visible={showSubtitleOverlay}
+                      videoRef={videoRef}
+                      language={selectedVideo.subtitles.language}
+                    />
+                  )}
+                </div>
               ) : (
                 <div className="video-error">
                   <p>No se pudo cargar el video</p>
@@ -715,6 +855,16 @@ const Pexels: React.FC = () => {
               </div>
             </div>
 
+            {/* 📝 Subtítulos */}
+            <div className="subtitles-section">
+              <SubtitleViewer 
+                videoId={selectedVideo.id.toString()}
+                videoUrl={selectedVideo.video_files[0]?.link || ''}
+                automaticSubtitles={selectedVideo.subtitles || null}
+                hasAudio={selectedVideo.hasAudio || false}
+                audioStatus={selectedVideo.audioStatus || 'unknown'}
+              />
+            </div>
 
             {/* 🗨️ Sección de comentarios */}
             <div className="comments-section">

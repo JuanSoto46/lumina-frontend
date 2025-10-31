@@ -42,7 +42,24 @@ export default function Reset() {
       setMsgType("success");
       setTimeout(() => navigate("/login"), 1200);
     } catch (e: any) {
-      setMsg(e.message || "Error al restablecer.");
+      // Traducir mensajes de error comunes al español
+      let errorMessage = e.message || "Error al restablecer.";
+      
+      if (errorMessage.includes("Missing fields")) {
+        errorMessage = "Todos los campos son obligatorios.";
+      } else if (errorMessage.includes("Passwords do not match")) {
+        errorMessage = "Las contraseñas no coinciden.";
+      } else if (errorMessage.includes("Invalid or expired token")) {
+        errorMessage = "El enlace ha expirado o es inválido. Solicita uno nuevo.";
+      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+        errorMessage = "Error de conexión. Verifica tu internet e intenta nuevamente.";
+      } else if (errorMessage.includes("400")) {
+        errorMessage = "Datos inválidos. Verifica la información e intenta nuevamente.";
+      } else if (errorMessage.includes("500")) {
+        errorMessage = "Error del servidor. Intenta nuevamente más tarde.";
+      }
+      
+      setMsg(errorMessage);
       setMsgType("error");
     }
   }

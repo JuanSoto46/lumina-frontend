@@ -1,5 +1,6 @@
 /* The code snippet is importing necessary modules and functions for a React component. */
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 
 /**
@@ -14,6 +15,8 @@ import { api } from "../services/api";
  * object with the updated value for the specified key.
  */
 export default function Signup() {
+  const navigate = useNavigate();
+  
   /* The code snippet is using the `useState` hook from React to create two state variables within the
   `Signup` component: */
   const [form, setForm] = useState({
@@ -77,10 +80,28 @@ export default function Signup() {
         age: Number(form.age) // Convertir age a número para la API
       };
       await api.signup(formData);
-      setMsg("Cuenta creada. Ahora puedes iniciar sesión.");
+      setMsg("¡Cuenta creada exitosamente! Redirigiendo al inicio de sesión...");
       setMsgType("success");
+      
+      // Redirigir al login después de 2 segundos
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (e: any) {
-      setMsg(e.message || "Error al crear la cuenta.");
+      // Traducir mensajes de error comunes al español
+      let errorMessage = e.message || "Error al crear la cuenta.";
+      
+      if (errorMessage.includes("Email already registered")) {
+        errorMessage = "Este correo electrónico ya está registrado.";
+      } else if (errorMessage.includes("Missing fields")) {
+        errorMessage = "Todos los campos son obligatorios.";
+      } else if (errorMessage.includes("must be at least 18")) {
+        errorMessage = "Debes tener al menos 18 años para registrarte.";
+      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+        errorMessage = "Error de conexión. Verifica tu internet e intenta nuevamente.";
+      }
+      
+      setMsg(errorMessage);
       setMsgType("error");
     }
   }

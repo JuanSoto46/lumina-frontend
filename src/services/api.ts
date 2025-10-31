@@ -56,16 +56,54 @@ export const api = {
 
   // endpoints Pexels
   pexels: {
-    getPopularVideos: () => http("/api/pexels/videos/popular"),
-    searchVideos: (query?: string, terms?: string, per_page: number = 20) => {
+    /**
+     * Get popular videos with automatic subtitles included
+     * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
+     * @returns {Promise<PexelsVideo[]>} List of popular videos with subtitles
+     */
+    getPopularVideos: (language: string = 'es') => {
+      const params = new URLSearchParams();
+      params.append("language", language);
+      return http(`/api/pexels/videos/popular?${params.toString()}`);
+    },
+    
+    /**
+     * Frontend-optimized endpoint for popular videos with guaranteed subtitle format
+     * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
+     * @returns {Promise<PexelsVideo[]>} Videos with guaranteed subtitle structure for frontend consumption
+     */
+    getVideosForFrontend: (language: string = 'es') => {
+      const params = new URLSearchParams();
+      params.append("language", language);
+      return http(`/api/pexels/frontend/videos?${params.toString()}`);
+    },
+    
+    searchVideos: (query?: string, terms?: string, per_page: number = 20, language: string = 'es') => {
       const params = new URLSearchParams();
       if (query) params.append("query", query);
       if (terms) params.append("terms", terms);
       params.append("per_page", String(per_page));
+      params.append("language", language);
       return http(`/api/pexels/videos/search?${params.toString()}`);
     },
-    getVideoById: (id: string | number) => http(`/api/pexels/videos/${id}`),
+    getVideoById: (id: string | number, language: string = 'es') => {
+      const params = new URLSearchParams();
+      params.append("language", language);
+      return http(`/api/pexels/videos/${id}?${params.toString()}`);
+    },
     healthCheck: () => http("/api/pexels/"),
+    
+    /**
+     * Test subtitle generation endpoint
+     * @param hasAudio - Whether to test with audio or visual subtitles
+     * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
+     */
+    testSubtitles: (hasAudio: boolean = false, language: string = 'es') => {
+      const params = new URLSearchParams();
+      if (hasAudio) params.append("hasAudio", "true");
+      params.append("language", language);
+      return http(`/api/pexels/test/subtitles?${params.toString()}`);
+    },
   },
 
   /** Methods for managing user's favorite videos */
@@ -186,6 +224,75 @@ export const api = {
      */
     async removeUserRating(videoId: string) { 
       return http(`/api/ratings/${videoId}`, { method: "DELETE" });
+    },
+  },
+
+  // Subtitles endpoints - conectados con tu backend
+  subtitles: {
+    /**
+     * POST /api/subtitles/generate
+     * Genera subtítulos desde un archivo de audio subido
+     * @param audioFile - Archivo de audio (mp3, wav, m4a, etc.)
+     * @param language - Idioma opcional para los subtítulos
+     */
+    generateFromFile: (audioFile: File, language?: string) => {
+      const formData = new FormData();
+      formData.append('audio', audioFile);
+      if (language) {
+        formData.append('language', language);
+      }
+      
+      return fetch(`${BASE}/api/subtitles/generate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: formData,
+      }).then(async (res) => {
+        if (!res.ok) {
+          const error = await res.json().catch(() => ({}));
+          throw new Error(error.message || `HTTP ${res.status}`);
+        }
+        return res.json();
+      });
+    },
+
+    /**
+     * POST /api/subtitles/generate-from-url
+     * Genera subtítulos desde una URL de video
+     * @param videoUrl - URL del video
+     * @param language - Idioma opcional para los subtítulos
+     */
+    generateFromURL: (videoUrl: string, language?: string) => {
+      return http("/api/subtitles/generate-from-url", {
+        method: "POST",
+        body: JSON.stringify({ videoUrl, language }),
+      });
+    },
+
+    /**
+     * GET /api/subtitles/:videoId
+     * Obtiene subtítulos existentes para un video específico
+     * @param videoId - ID del video
+     */
+    getSubtitles: (videoId: string | number) => {
+      return http(`/api/subtitles/${videoId}`);
+    },
+
+    /**
+     * Utility function to extract subtitles from video object that already has them
+     * @param video - Video object with embedded subtitles
+     * @returns Subtitles object or null
+     */
+    extractFromVideo: (video: any) => {
+      if (video.subtitles && video.hasSubtitles) {
+        return {
+          ...video.subtitles,
+          audioStatus: video.audioStatus || 'unknown',
+          hasAudio: video.hasAudio || false
+        };
+      }
+      return null;
     },
   },
 
