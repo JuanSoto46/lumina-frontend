@@ -364,45 +364,6 @@ const Pexels: React.FC = () => {
 
 
   /**
-   * Adds a video to user's favorites in backend
-   */
-  const addToFavorites = async (videoId: number) => {
-    if (savingFavorite === videoId) return; // 🚫 evita doble petición
-    setSavingFavorite(videoId);
-
-    const video = videos.find(v => v.id === videoId);
-    if (!video) return;
-
-    // ✅ Obtener el archivo de video reproducible (.mp4)
-    const bestFile = getBestVideoFile(video.video_files);
-
-    try {
-      await api.favorites.add({
-        id: video.id.toString(),
-        title: `Video por ${video.user.name}`,
-        url: bestFile?.link || video.video_files[0]?.link,
-        thumbnail: video.image,
-      });
-      console.log("✅ Added to favorites");
-    } catch (err) {
-      console.error("❌ Error adding to favorites:", err);
-    } finally {
-      setSavingFavorite(null);
-    }
-  };
-
-  /**
-   * Removes a video from user's favorites in backend
-   */
-  const removeFromFavorites = async (videoId: number) => {
-    try {
-      await api.favorites.remove(videoId.toString());
-      console.log("🗑️ Removed from favorites");
-    } catch (err) {
-      console.error("❌ Error removing from favorites:", err);
-    }
-  };
-  /**
    * Removes a video from user's favorites in backend
    */
   const removeFromFavorites = async (videoId: number) => {

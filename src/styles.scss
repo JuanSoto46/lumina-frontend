@@ -1431,6 +1431,270 @@ body.login-page .login-container {
   }
 }
 
+/* User Manual Styles */
+.user-manual {
+  min-height: 100vh;
+  background: transparent; /* Usar el fondo global del body */
+  color: #e0e0e0;
+}
+
+.manual-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header header"
+    "nav content"
+    "footer footer";
+  gap: 2rem;
+  min-height: 100vh;
+}
+
+.manual-header {
+  grid-area: header;
+  text-align: center;
+  padding: 2rem 0;
+  border-bottom: 2px solid #4a4a4a;
+  margin-bottom: 1rem;
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 0 0 1rem 0;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .manual-subtitle {
+    font-size: 1.2rem;
+    color: #b0b8c8;
+    margin: 0;
+  }
+}
+
+.manual-navigation {
+  grid-area: nav;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .nav-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    border-bottom: 2px solid #6366f1;
+    padding-bottom: 0.5rem;
+  }
+
+  .nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #b0b8c8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+    font-size: 0.95rem;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+
+    .nav-icon {
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+    }
+  }
+}
+
+.manual-content {
+  grid-area: content;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.manual-section {
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #6366f1;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    margin: 2rem 0 1rem 0;
+    color: #ffffff;
+  }
+
+  h4 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.75rem 0;
+    color: #ffffff;
+  }
+
+  p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #b0b8c8;
+  }
+
+  ul, ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    color: #b0b8c8;
+
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.content-block {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #6366f1;
+}
+
+.trouble-item {
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #ffc107;
+
+  h4 {
+    color: #ffc107;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.faq-item {
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #22c55e;
+
+  h3 {
+    color: #22c55e;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    margin: 0;
+    color: #b0b8c8;
+  }
+}
+
+.manual-footer {
+  grid-area: footer;
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 2px solid #4a4a4a;
+  margin-top: 2rem;
+
+  .footer-content {
+    color: #b0b8c8;
+    
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .version-info {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+/* Responsive Design for User Manual */
+@media (max-width: 1024px) {
+  .manual-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "nav" 
+      "content"
+      "footer";
+    gap: 1.5rem;
+  }
+
+  .manual-navigation {
+    position: static;
+    .nav-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .nav-item {
+      flex: 0 0 auto;
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .manual-container {
+    padding: 1rem;
+  }
+
+  .manual-header h1 {
+    font-size: 2rem;
+  }
+
+  .manual-content {
+    padding: 1.5rem;
+  }
+
+  .manual-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .nav-item {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
 .video-details {
   padding: 20px 25px;
   
