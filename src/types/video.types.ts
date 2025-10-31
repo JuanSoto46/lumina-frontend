@@ -13,19 +13,22 @@ export interface SubtitleSegment {
 }
 
 /**
- * Subtitle object structure from backend
+ * Subtitle object structure from backend - Updated for latest backend features
  */
 export interface VideoSubtitles {
   srt: string;
   segments: SubtitleSegment[];
   language: string;
+  languageName?: string; // Human-readable language name
   duration: number;
   hasAudio: boolean;
   subtitleType: 'transcription' | 'visual_description';
   generated: boolean;
-  videoId: string;
+  videoId?: string;
   aiContent?: string;
   simulated?: boolean;
+  provider?: string; // e.g., 'openai-gpt-3.5-turbo'
+  whisperModel?: string | null;
 }
 
 /**
@@ -104,4 +107,31 @@ export interface VideoRating {
     _id: string;
     firstName: string;
   };
+  createdAt: string;
 }
+
+/**
+ * Supported languages for subtitle generation - Updated to match backend
+ */
+export interface SupportedLanguage {
+  code: string;
+  name: string;
+  flag: string;
+}
+
+/**
+ * Available languages for subtitle generation
+ */
+export const SUPPORTED_SUBTITLE_LANGUAGES: SupportedLanguage[] = [
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' }
+];
