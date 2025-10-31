@@ -362,6 +362,7 @@ const Pexels: React.FC = () => {
     }
   };
 
+
   /**
    * Removes a video from user's favorites in backend
    */
