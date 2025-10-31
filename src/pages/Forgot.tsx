@@ -22,7 +22,20 @@ export default function Forgot() {
       setMsg("Si el correo existe, se ha enviado un enlace de recuperación.");
       setMsgType("success");
     } catch (e: any) {
-      setMsg(e.message || "Error al enviar el enlace.");
+      // Traducir mensajes de error comunes al español
+      let errorMessage = e.message || "Error al enviar el enlace.";
+      
+      if (errorMessage.includes("Email required")) {
+        errorMessage = "El correo electrónico es obligatorio.";
+      } else if (errorMessage.includes("Email service error")) {
+        errorMessage = "Error del servicio de correo. Intenta nuevamente más tarde.";
+      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+        errorMessage = "Error de conexión. Verifica tu internet e intenta nuevamente.";
+      } else if (errorMessage.includes("500")) {
+        errorMessage = "Error del servidor. Intenta nuevamente más tarde.";
+      }
+      
+      setMsg(errorMessage);
       setMsgType("error");
     }
   }

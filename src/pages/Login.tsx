@@ -29,7 +29,20 @@ export default function Login({ onAuth }: Props) {
       setMsgType("success");
       navigate("/pexels");
     } catch (e: any) {
-      setMsg(e.message || "Error al iniciar sesión.");
+      // Traducir mensajes de error comunes al español
+      let errorMessage = e.message || "Error al iniciar sesión.";
+      
+      if (errorMessage.includes("Invalid credentials")) {
+        errorMessage = "Correo electrónico o contraseña incorrectos.";
+      } else if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+        errorMessage = "Error de conexión. Verifica tu internet e intenta nuevamente.";
+      } else if (errorMessage.includes("401")) {
+        errorMessage = "Credenciales inválidas. Verifica tu correo y contraseña.";
+      } else if (errorMessage.includes("500")) {
+        errorMessage = "Error del servidor. Intenta nuevamente más tarde.";
+      }
+      
+      setMsg(errorMessage);
       setMsgType("error");
     }
   }

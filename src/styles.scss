@@ -166,7 +166,10 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a2332 0%, #2d4a5a 50%, #1a2332 100%);
+  /* Use transparent here to avoid duplicating the page background gradient.
+     The body already defines the global gradient, keeping the container transparent
+     lets the login-card act as the single foreground panel. */
+  background: transparent;
   padding: 20px;
   overflow: visible;
   box-sizing: border-box;
@@ -1342,12 +1345,19 @@ body.login-page .login-container {
 .video-player {
   padding: 20px 25px 0;
   
-  .video-element {
+  .video-container {
+    position: relative;
+    display: inline-block;
     width: 100%;
     max-width: 800px;
+  }
+  
+  .video-element {
+    width: 100%;
     height: auto;
     border-radius: 12px;
     background: #000;
+    display: block;
   }
   
   .video-error {
@@ -1357,6 +1367,66 @@ body.login-page .login-container {
     
     p {
       font-size: 1.1rem;
+    }
+  }
+}
+
+// Video overlay controls (language selector positioned over video)
+.video-overlay-controls {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  
+  .video-language-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 6px 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    label {
+      color: $text;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    
+    .video-language-select {
+      padding: 4px 6px;
+      background: rgba(255,255,255,.15);
+      color: $text;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.75rem;
+      min-width: 60px;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        box-shadow: 0 0 0 2px rgba(46, 91, 255, 0.4);
+      }
+      
+      &:hover {
+        background: rgba(255,255,255,.25);
+        border-color: rgba(255,255,255,.4);
+      }
+      
+      option {
+        background: #1a2332;
+        color: $text;
+      }
+    }
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -2671,6 +2741,983 @@ body.login-page .login-container {
   }
 }
 
+/* ============================
+   💬 Estilos de Comentarios
+============================ */
+.comments-section {
+  margin-top: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  h3 {
+    font-size: 1.4rem;
+    color: $text;
+    margin-bottom: 20px;
+    border-left: 4px solid $primary;
+    padding-left: 12px;
+  }
+
+  &:hover {
+    border-color: rgba(46, 91, 255, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+.add-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+
+  textarea {
+    resize: none;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: $text;
+    font-size: 0.95rem;
+    min-height: 80px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.2);
+      outline: none;
+    }
+  }
+
+  button {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #2e5bff 0%, #6c5ce7 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(46, 91, 255, 0.3);
+    }
+  }
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 18px;
+
+  li {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px 18px;
+    position: relative;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    p {
+      margin: 4px 0;
+      color: $muted;
+
+      strong {
+        color: $text;
+      }
+    }
+  }
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  button {
+    background: transparent;
+    border: none;
+    color: $muted;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.edit-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+
+  textarea {
+    min-height: 70px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: $text;
+    padding: 10px;
+    resize: none;
+
+    &:focus {
+      border-color: $primary;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.2);
+    }
+  }
+
+  button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:first-of-type {
+      background: linear-gradient(135deg, #2e5bff 0%, #6c5ce7 100%);
+      color: white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(46, 91, 255, 0.3);
+      }
+    }
+
+    &:last-of-type {
+      background: rgba(231, 76, 60, 0.2);
+      color: #e74c3c;
+
+      &:hover {
+        background: rgba(231, 76, 60, 0.35);
+      }
+    }
+  }
+}
+
+/* 🌙 Adaptación responsive */
+@media (max-width: 640px) {
+  .add-comment button {
+    align-self: stretch;
+  }
+
+  .comment-actions {
+    position: static;
+    justify-content: flex-end;
+  }
+}
+
 .main-content-with-sidebar {
   transition: margin-left 0.3s ease;
 }
+
+
+/* === ⭐ Rating Stars === */
+.rating-section{
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 1rem;
+
+  .stars {
+    font-size: 1.8rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.25s ease, transform 0.2s ease;
+
+    &:hover {
+      color: #ffd700;
+      transform: scale(1.1);
+    }
+
+    &.active {
+      color: #ffcc00;
+    }
+  }
+
+  /* Animación al hacer click */
+  .stars:active {
+    transform: scale(0.9);
+  }
+
+  
+}
+
+/* Efecto de brillo en hover */
+.rating-container:hover .star.active {
+  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
+}
+
+/* Modo oscuro integrado */
+@media (prefers-color-scheme: dark) {
+  .rating-container {
+    .star {
+      color: #666;
+
+      &.active {
+        color: #ffda44;
+      }
+    }
+  }
+}
+
+.rating-section {
+  display: flex;
+  flex-direction: column; // 👈 fuerza el apilado vertical
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+
+  .average-rating {
+    margin-bottom: 1rem;
+
+    h3 {
+      color: #e6e6e6;
+      margin-bottom: 0.3rem;
+    }
+
+    .average-value {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ffd700;
+    }
+  }
+
+  .rating-divider {
+    width: 80%;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+  }
+
+  .user-rating {
+    h3 {
+      color: #e6e6e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      margin-bottom: 0.6rem;
+    }
+
+    .remove-rating-btn {
+      background: transparent;
+      border: 1px solid #f55;
+      color: #f55;
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: #f55;
+        color: #fff;
+      }
+    }
+  }
+}
+
+// ===== SUBTITLES SECTION IN VIDEO MODAL =====
+.subtitles-section {
+  margin: 1.5rem 0;
+  
+  .subtitle-viewer {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(6px);
+    
+    .subtitle-header h3 {
+      color: #e6e6e6;
+      margin-bottom: 1rem;
+    }
+    
+    .subtitle-controls {
+      .file-upload-section,
+      .url-generation-section {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        
+        h4 {
+          color: #e6e6e6;
+          margin-bottom: 0.5rem;
+        }
+        
+        input, select, button {
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #e6e6e6;
+          border-radius: 6px;
+          padding: 0.5rem;
+          
+          &:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+          }
+        }
+        
+        button {
+          background: #4CAF50;
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s;
+          
+          &:hover {
+            background: #45a049;
+          }
+          
+          &:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+    
+    .subtitle-display {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      max-height: 200px;
+      overflow-y: auto;
+      
+      .subtitle-line {
+        color: #e6e6e6;
+        margin-bottom: 0.5rem;
+        padding: 0.25rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .timestamp {
+          color: #4CAF50;
+          font-family: monospace;
+          font-size: 0.9rem;
+          margin-right: 0.5rem;
+        }
+        
+        .text {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}
+
+// ===== SUBTITLE VIEWER STYLES =====
+.subtitle-viewer {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+
+  .subtitle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    h3 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        
+        &.available {
+          background: rgba(76, 175, 80, 0.2);
+          color: #4CAF50;
+          border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+        
+        &.unavailable {
+          background: rgba(158, 158, 158, 0.2);
+          color: #9e9e9e;
+          border: 1px solid rgba(158, 158, 158, 0.4);
+        }
+      }
+    }
+
+    .subtitle-actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  .subtitle-generator {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    h4 {
+      color: #ffffff;
+      margin: 0 0 15px 0;
+      font-size: 1.1rem;
+    }
+
+    .generator-options {
+      .language-selector {
+        margin-bottom: 20px;
+
+        label {
+          color: #ffffff;
+          display: block;
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+
+        select {
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 8px;
+          padding: 8px 12px;
+          color: #ffffff;
+          font-size: 0.95rem;
+
+          option {
+            background: #1a1a1a;
+            color: #ffffff;
+          }
+        }
+      }
+
+      .generation-methods {
+        .method-option {
+          margin-bottom: 20px;
+          padding: 15px;
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+
+          h5 {
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+          }
+
+          p {
+            color: #cccccc;
+            margin: 5px 0 10px 0;
+            font-size: 0.9rem;
+          }
+
+          input[type="file"] {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px;
+            color: #ffffff;
+            width: 100%;
+            margin-bottom: 10px;
+
+            &::file-selector-button {
+              background: rgba(255, 255, 255, 0.1);
+              border: none;
+              border-radius: 4px;
+              padding: 6px 12px;
+              color: #ffffff;
+              cursor: pointer;
+              margin-right: 10px;
+            }
+          }
+
+          .file-info {
+            background: rgba(46, 91, 255, 0.1);
+            border: 1px solid rgba(46, 91, 255, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+
+            p {
+              color: #ffffff;
+              margin: 0 0 10px 0;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+
+    .generating-status {
+      text-align: center;
+      padding: 20px;
+      background: rgba(46, 91, 255, 0.1);
+      border: 1px solid rgba(46, 91, 255, 0.3);
+      border-radius: 8px;
+      margin-top: 15px;
+
+      .loading-spinner {
+        margin: 0 auto 10px auto;
+        width: 40px;
+        height: 40px;
+      }
+
+      p {
+        color: #ffffff;
+        margin: 0;
+        font-style: italic;
+      }
+    }
+  }
+
+  .subtitle-content {
+    .subtitle-list {
+      .subtitle-info {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 15px;
+
+        p {
+          color: #cccccc;
+          margin: 3px 0;
+          font-size: 0.9rem;
+        }
+      }
+
+      .subtitle-items {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 3px;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.5);
+          }
+        }
+
+        .subtitle-item {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 8px;
+          padding: 12px;
+          margin-bottom: 8px;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+          }
+
+          .subtitle-time {
+            color: #46a7ff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+          }
+
+          .subtitle-text {
+            color: #ffffff;
+            line-height: 1.4;
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+
+    .no-subtitles {
+      text-align: center;
+      padding: 40px 20px;
+      color: #cccccc;
+
+      p {
+        margin: 8px 0;
+        font-size: 0.95rem;
+      }
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+
+      .loading-spinner {
+        margin: 0 auto 15px auto;
+        width: 40px;
+        height: 40px;
+      }
+
+      p {
+        color: #cccccc;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Responsive adjustments for subtitles
+@media (max-width: 768px) {
+  .subtitle-viewer {
+    padding: 16px;
+
+    .subtitle-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      .subtitle-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    .subtitle-generator {
+      padding: 15px;
+
+      .generator-options {
+        .generation-methods {
+          .method-option {
+            padding: 12px;
+          }
+        }
+      }
+    }
+
+    .subtitle-content {
+      .subtitle-list {
+        .subtitle-items {
+          max-height: 300px;
+
+          .subtitle-item {
+            padding: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  // Display mode selector
+  .display-mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0;
+
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e6e6e6;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #4CAF50;
+      }
+
+      &.active {
+        background: #4CAF50;
+        border-color: #4CAF50;
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+      }
+    }
+  }
+
+  // Automatic subtitles specific styling
+  .automatic-subtitles {
+    .subtitle-info {
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-label {
+          color: #b3b3b3;
+          font-weight: 500;
+          font-size: 0.9rem;
+        }
+
+        .info-value {
+          color: #ffffff;
+          font-weight: 600;
+          font-size: 0.9rem;
+
+          &.simulated {
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+        }
+      }
+    }
+
+    .subtitle-display {
+      .subtitle-line {
+        border-left: 3px solid #4CAF50;
+        padding-left: 12px;
+        margin-bottom: 12px;
+
+        .timestamp {
+          color: #4CAF50;
+          font-family: 'Monaco', 'Menlo', monospace;
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+
+        .text {
+          color: #ffffff;
+          font-size: 0.95rem;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments for subtitle viewer
+@media (max-width: 768px) {
+  .subtitle-viewer {
+    .display-mode-selector {
+      flex-direction: column;
+      gap: 8px;
+
+      .mode-btn {
+        padding: 12px;
+        text-align: center;
+      }
+    }
+
+    .automatic-subtitles .subtitle-info {
+      .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+    }
+  }
+}
+
+// ===== VIDEO SUBTITLE OVERLAY =====
+.video-subtitle-overlay {
+  position: absolute;
+  bottom: 60px; // Space above video controls
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  pointer-events: none;
+  z-index: 1000;
+  
+  .subtitle-text {
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    text-align: center;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    
+    // Animation for subtitle appearance
+    animation: subtitleFadeIn 0.2s ease-in-out;
+    
+    @keyframes subtitleFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+  
+  .subtitle-progress {
+    margin-top: 8px;
+    
+    .progress-bar {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 1px;
+      overflow: hidden;
+      
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #66BB6A);
+        transition: width 0.1s ease-out;
+      }
+    }
+  }
+}
+
+// Video player container positioning
+.video-player {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .video-element {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}
+
+// Modal header controls
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  
+  .header-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    
+    .subtitle-toggle-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e6e6e6;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #4CAF50;
+      }
+      
+      &.active {
+        background: #4CAF50;
+        border-color: #4CAF50;
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+      }
+    }
+    
+    .close-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e6e6e6;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(255, 0, 0, 0.8);
+        border-color: #ff0000;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Responsive adjustments for subtitle overlay
+@media (max-width: 768px) {
+  .video-subtitle-overlay {
+    bottom: 45px;
+    width: 95%;
+    
+    .subtitle-text {
+      font-size: 1rem;
+      padding: 6px 12px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .video-subtitle-overlay {
+    bottom: 35px;
+    
+    .subtitle-text {
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
+  }
+}
+
