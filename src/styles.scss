@@ -3985,3 +3985,112 @@ body.login-page .login-container {
   }
 }
 
+/* === PasswordField base === */
+.password-field {
+  display: block;
+}
+
+.password-label {
+  display: block;
+  text-align: left;
+  margin: 0 0 8px 2px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+}
+
+/* Contenedor del input + botón ojo */
+.password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  /* Asegura que los inputs con .login-input no queden tapados por el botón */
+  .login-input {
+    padding-right: 44px; /* espacio para el ojo */
+  }
+}
+
+/* Botón ojo: accesible, grande y centrado verticalmente */
+.eye-btn {
+  --hit: 36px;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: var(--hit);
+  height: var(--hit);
+  min-width: var(--hit);
+  min-height: var(--hit);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  color: #e6e6e6;
+  cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.06s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.28);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.98);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.35);
+    border-color: rgba(46, 91, 255, 0.6);
+  }
+
+  /* Iconos SVG usan currentColor */
+  svg { display: block; }
+}
+
+/* Variante dentro de tarjetas de login/signup (coherencia con tu estética) */
+.login-card .eye-btn {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+
+  &:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.32);
+  }
+}
+
+/* Compacta en móviles para que nada se descuadre */
+@media (max-width: 640px) {
+  .password-wrap .login-input {
+    padding-right: 48px;
+  }
+
+  .eye-btn {
+    right: 6px;
+    --hit: 34px;
+    border-radius: 8px;
+  }
+}
+
+/* Alto contraste (por si el usuario force high-contrast) */
+@media (prefers-contrast: more) {
+  .eye-btn {
+    border-color: rgba(255,255,255,0.6);
+  }
+}
+
+/* Si un tema claro llegara a existir en el futuro cercano de esta galaxia: */
+:root[color-scheme="light"] .eye-btn {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.15);
+  color: #1a1a1a;
+}
+
+
+
+

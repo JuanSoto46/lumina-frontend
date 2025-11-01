@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
+import PasswordField from "../components/PasswordField";
 
 /**
  * The `Signup` function in TypeScript React handles user registration by capturing personal
@@ -191,30 +192,33 @@ export default function Signup() {
             </div>
 
             <div className="input-group">
-              <label htmlFor="password" className="sr-only">Contraseña</label>
-              <input
+              <PasswordField
                 id="password"
-                type="password"
+                name="password"
+                label="Contraseña"
+                placeholder="Contraseña"
                 value={form.password}
                 onChange={(e) => set("password", e.target.value)}
-                placeholder="Contraseña"
                 required
                 aria-required="true"
                 className="login-input"
+                autoComplete="new-password"
               />
             </div>
 
             <div className="input-group">
-              <label htmlFor="confirmPassword" className="sr-only">Confirmar contraseña</label>
-              <input
+              
+              <PasswordField
                 id="confirmPassword"
-                type="password"
+                name="password"
+                label="Confirmar contraseña"
                 value={form.confirmPassword}
                 onChange={(e) => set("confirmPassword", e.target.value)}
                 placeholder="Confirmar contraseña"
                 required
                 aria-required="true"
                 className="login-input"
+                autoComplete="new-password"
               />
             </div>
           </section>
