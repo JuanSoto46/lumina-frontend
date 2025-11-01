@@ -54,7 +54,7 @@ export const api = {
       body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
     }),
 
-  // endpoints Pexels
+  // endpoints Pexels - Actualizados para coincidir con el backend
   pexels: {
     /**
      * Get popular videos with automatic subtitles included
@@ -78,23 +78,46 @@ export const api = {
       return http(`/api/pexels/frontend/videos?${params.toString()}`);
     },
     
+    /**
+     * Alternative endpoint for retrieving popular videos (Spanish naming convention)
+     * @returns {Promise<Object>} Complete Pexels API response object with videos array
+     */
+    getPeliculas: () => http("/api/pexels/peliculas"),
+    
+    /**
+     * Search for videos on Pexels based on query parameters
+     * @param query - Single search query string
+     * @param terms - Comma-separated search terms
+     * @param per_page - Number of videos per page (max 80)
+     * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
+     */
     searchVideos: (query?: string, terms?: string, per_page: number = 20, language: string = 'es') => {
       const params = new URLSearchParams();
       if (query) params.append("query", query);
       if (terms) params.append("terms", terms);
       params.append("per_page", String(per_page));
       params.append("language", language);
-      return http(`/api/pexels/videos/search?${params.toString()}`);
+      return http(`/api/pexels/videos?${params.toString()}`);
     },
+    
+    /**
+     * Get a specific video by its ID from Pexels API
+     * @param id - Video ID
+     * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
+     */
     getVideoById: (id: string | number, language: string = 'es') => {
       const params = new URLSearchParams();
       params.append("language", language);
       return http(`/api/pexels/videos/${id}?${params.toString()}`);
     },
+    
+    /**
+     * Health check endpoint for Pexels API service status
+     */
     healthCheck: () => http("/api/pexels/"),
     
     /**
-     * Test subtitle generation endpoint
+     * Test subtitle generation endpoint with detailed logging
      * @param hasAudio - Whether to test with audio or visual subtitles
      * @param language - Language for subtitles ('es' for Spanish, 'en' for English)
      */
