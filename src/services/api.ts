@@ -97,7 +97,7 @@ export const api = {
       if (terms) params.append("terms", terms);
       params.append("per_page", String(per_page));
       params.append("language", language);
-      return http(`/api/pexels/videos?${params.toString()}`);
+      return http(`/api/pexels/videos/search?${params.toString()}`);
     },
     
     /**
