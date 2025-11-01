@@ -1,6 +1,7 @@
 /* src/pages/ChangePassword.tsx */
 import React, { useState, useEffect } from "react";
 import { api } from "../services/api";
+import PasswordField from "../components/PasswordField";
 
 export default function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -43,17 +44,26 @@ export default function ChangePassword() {
           <div className="input-group">
             <label htmlFor="current" className="label">Contraseña actual</label>
             <input id="current" className="login-input" type="password"
-              value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} required />
+              value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} required 
+              placeholder="••••••••"
+              />
           </div>
           <div className="input-group">
-            <label htmlFor="pwd" className="label">Nueva contraseña</label>
-            <input id="pwd" className="login-input" type="password"
-              value={newPassword} onChange={e=>setNewPassword(e.target.value)} required />
+            <PasswordField
+              id="new-password" className="login-input" name="newPassword" label= "Nueva contraseña"
+              value={newPassword} onChange={e=>setNewPassword(e.target.value)} required 
+              placeholder="••••••••"
+              autoComplete="new-password"
+              />
           </div>
           <div className="input-group">
-            <label htmlFor="confirm" className="label">Confirmar contraseña</label>
-            <input id="confirm" className="login-input" type="password"
-              value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} required />
+            <PasswordField
+              id="confirm-password" className="login-input" name="confirmPassword" label= "Confirmar contraseña"
+              value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} required 
+              placeholder="••••••••"
+              autoComplete="new-password"
+              />
+
           </div>
           <button type="submit" className="login-button">Guardar</button>
         </form>

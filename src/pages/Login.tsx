@@ -10,6 +10,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
+import PasswordField from "../components/PasswordField";
 
 type Props = { onAuth?: () => void };
 
@@ -82,16 +83,16 @@ export default function Login({ onAuth }: Props) {
           </div>
 
           <div className="input-group">
-            <label htmlFor="password" className="label">Contraseña</label>
-            <input
+            <PasswordField
               id="password"
-              type="password"
+              name="password"
+              label="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Contraseña"
               required
               className="login-input"
-              aria-required="true"
+              autoComplete="current-password"
             />
           </div>
 
