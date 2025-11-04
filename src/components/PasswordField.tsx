@@ -1,66 +1,82 @@
-import { useState } from "react";
+// src/components/PasswordField.tsx
+import React, { useId, useState } from "react";
 
 type Props = {
   id?: string;
   name?: string;
   label?: string;
   placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  className?: string;
+  className?: string;           // ej. "login-input"
   autoComplete?: string;
 };
 
 export default function PasswordField({
-  id = "password",
+  id,
   name = "password",
   label = "Contraseña",
-  placeholder = "••••••••",
+  placeholder = "Contraseña",
   value,
   onChange,
   required,
-  className = "login-input",
+  className = "",
   autoComplete = "current-password",
 }: Props) {
+  const uid = useId();
+  const inputId = id || `pwd-${uid}`;
   const [show, setShow] = useState(false);
 
   return (
     <div className="password-field">
-      {label && <label htmlFor={id} className="password-label">{label}</label>}
+      <label htmlFor={inputId} className="password-label">{label}</label>
+
       <div className="password-wrap">
         <input
-          id={id}
+          id={inputId}
           name={name}
           type={show ? "text" : "password"}
-          placeholder={placeholder}
           value={value}
           onChange={onChange}
+          placeholder={placeholder}
           required={required}
-          className={className}
           autoComplete={autoComplete}
+          className={`login-input ${className}`.trim()}
+          aria-describedby={`${inputId}-hint`}
         />
+
         <button
-          type="button"
-          className="eye-btn"
-          aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
-          aria-pressed={show}
-          onClick={() => setShow(s => !s)}
-        >
-          {show ? (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" stroke="currentColor" strokeWidth="1.6" />
-              <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.6" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M3 3l18 18" stroke="currentColor" strokeWidth="1.6"/>
-              <path d="M2 12s3.8-7 10-7c2.4 0 4.4.7 6 1.7" stroke="currentColor" strokeWidth="1.6"/>
-              <path d="M22 12s-3.8 7-10 7c-2.4 0-4.4-.7-6-1.7" stroke="currentColor" strokeWidth="1.6"/>
-            </svg>
-          )}
-        </button>
+  type="button"
+  className={`eye-btn ${show ? "is-on" : ""}`}
+  aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
+  onClick={() => setShow(s => !s)}
+>
+  {/* OJO ABIERTO (outline) */}
+  <svg className="icon-eye open" viewBox="0 0 24 24" aria-hidden="true">
+    {/* contorno del ojo */}
+    <path
+      d="M2 12c2.5-4.5 6.8-7 10-7s7.5 2.5 10 7c-2.5 4.5-6.8 7-10 7s-7.5-2.5-10-7Z"
+    />
+    {/* iris (anillo) */}
+    <circle cx="12" cy="12" r="3.8" className="iris" />
+    {/* pupila (punto) */}
+    <circle cx="12" cy="12" r="1.6" className="pupil" />
+  </svg>
+
+  {/* OJO TACHADO */}
+  <svg className="icon-eye off" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M2 12c2.5-4.5 6.8-7 10-7s7.5 2.5 10 7c-2.5 4.5-6.8 7-10 7s-7.5-2.5-10-7Z"/>
+    <circle cx="12" cy="12" r="3.8" className="iris" />
+    <line x1="3" y1="3" x2="21" y2="21" />
+  </svg>
+</button>
+
       </div>
+
+      <span id={`${inputId}-hint`} className="sr-only">
+        Botón con icono de ojo para alternar visibilidad.
+      </span>
     </div>
   );
 }

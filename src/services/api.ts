@@ -75,7 +75,7 @@ export const api = {
     getVideosForFrontend: (language: string = 'es') => {
       const params = new URLSearchParams();
       params.append("language", language);
-      return http(`/api/pexels/frontend/videos?${params.toString()}`);
+      return http(`/api/pexels/videos/popular?language=${encodeURIComponent(language)}`);
     },
     
     /**

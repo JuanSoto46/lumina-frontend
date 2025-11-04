@@ -25,6 +25,7 @@ export default function Login({ onAuth }: Props) {
     e.preventDefault();
     try {
       await api.login(email, password);
+      document.body.classList.add("hide-public");
       onAuth?.();
       setMsg("Inicio de sesión exitoso.");
       setMsgType("success");
