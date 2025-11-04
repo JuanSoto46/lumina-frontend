@@ -1,6 +1,6 @@
 /* The code snippet is importing necessary modules and functions for a React component. */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
 import PasswordField from "../components/PasswordField";
 
@@ -122,11 +122,11 @@ export default function Signup() {
 
         <h1 id="signup-title" className="sr-only">Crear cuenta en Lumina</h1>
 
-        <form onSubmit={onSubmit} className="login-form" aria-describedby="signup-status">
+        <form onSubmit={onSubmit} className="login-form form" aria-describedby="signup-status">
           {/* Información personal */}
           <section aria-label="Información personal">
-            <div className="input-group">
-              <label htmlFor="firstName" className="sr-only">Nombre</label>
+            <div className="input-group form-field">
+              <label htmlFor="firstName">Nombre</label>
               <input
                 id="firstName"
                 type="text"
@@ -135,12 +135,13 @@ export default function Signup() {
                 placeholder="Nombre"
                 required
                 aria-required="true"
-                className="login-input"
+                className="login-input input"
+                autoComplete="given-name"
               />
             </div>
 
-            <div className="input-group">
-              <label htmlFor="lastName" className="sr-only">Apellido</label>
+            <div className="input-group form-field">
+              <label htmlFor="lastName">Apellido</label>
               <input
                 id="lastName"
                 type="text"
@@ -149,20 +150,20 @@ export default function Signup() {
                 placeholder="Apellido"
                 required
                 aria-required="true"
-                className="login-input"
+                className="login-input input"
+                autoComplete="family-name"
               />
             </div>
 
-            <div className="input-group">
-              <label htmlFor="age" className="sr-only">Edad</label>
+            <div className="input-group form-field">
+              <label htmlFor="age">Edad</label>
               <input
                 id="age"
                 type="number"
                 min={18}
                 value={form.age}
                 onChange={(e) => set("age", e.target.value)}
-                onFocus={(e) => {
-                  // Si el campo está vacío o es "0", limpiar al hacer foco
+                onFocus={() => {
                   if (form.age === "" || form.age === "0") {
                     set("age", "");
                   }
@@ -170,15 +171,16 @@ export default function Signup() {
                 placeholder="Edad (mínimo 18 años)"
                 required
                 aria-required="true"
-                className="login-input"
+                className="login-input input"
+                inputMode="numeric"
               />
             </div>
           </section>
 
           {/* Credenciales de acceso */}
           <section aria-label="Credenciales de acceso">
-            <div className="input-group">
-              <label htmlFor="email" className="sr-only">Correo electrónico</label>
+            <div className="input-group form-field">
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 id="email"
                 type="email"
@@ -187,15 +189,17 @@ export default function Signup() {
                 placeholder="Correo electrónico"
                 required
                 aria-required="true"
-                className="login-input"
+                className="login-input input"
+                autoComplete="email"
               />
             </div>
 
-            <div className="input-group">
+            <div className="input-group form-field">
+              <label htmlFor="password">Contraseña</label>
               <PasswordField
                 id="password"
                 name="password"
-                label="Contraseña"
+                label=""           /* el label visible lo provee el <label> de arriba */
                 placeholder="Contraseña"
                 value={form.password}
                 onChange={(e) => set("password", e.target.value)}
@@ -206,12 +210,12 @@ export default function Signup() {
               />
             </div>
 
-            <div className="input-group">
-              
+            <div className="input-group form-field">
+              <label htmlFor="confirmPassword">Confirmar contraseña</label>
               <PasswordField
                 id="confirmPassword"
-                name="password"
-                label="Confirmar contraseña"
+                name="confirmPassword"
+                label=""           /* el label visible lo provee el <label> de arriba */
                 value={form.confirmPassword}
                 onChange={(e) => set("confirmPassword", e.target.value)}
                 placeholder="Confirmar contraseña"
@@ -223,12 +227,14 @@ export default function Signup() {
             </div>
           </section>
 
-          <button type="submit" className="login-button">Crear cuenta</button>
+          <div className="actions">
+            <button type="submit" className="login-button btn-primary">Crear cuenta</button>
+          </div>
         </form>
 
         <nav className="login-links">
           <p className="signup-text">
-            <a href="/login" className="signup-link">Regresar al principio</a>
+            <Link to="/login" className="signup-link">Regresar al principio</Link>
           </p>
         </nav>
 

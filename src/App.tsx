@@ -30,6 +30,15 @@ function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+  if (authed) {
+    document.body.classList.add("hide-public");
+  } else {
+    document.body.classList.remove("hide-public");
+  }
+}, [authed]);
+
+
   /* The `useEffect` hook in the provided code snippet is used to set up a listener for changes in the
   browser's `localStorage` object. Here's a breakdown of what it's doing: */
   useEffect(() => {
@@ -86,6 +95,7 @@ function AppContent() {
     api.logout();
     setAuthed(false);
     setSidebarOpen(false);
+    document.body.classList.remove("hide-public");
     // Redirigir a la página de inicio después del logout
     navigate('/');
   }
@@ -115,6 +125,7 @@ function AppContent() {
         authed={authed} 
         onLogout={logout} 
         onToggleSidebar={authed ? toggleSidebar : undefined}
+        showSearchInHeader={authed && location.pathname === "/pexels"}
       />
       
       {authed && (

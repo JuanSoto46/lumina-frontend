@@ -17,7 +17,6 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   color: $text;
-  padding-top: 76px; /* Espacio para el navbar fijo en todas las páginas */
 }
 
 
@@ -146,7 +145,7 @@ body.login-page main.container {
 a { color: $primary; text-decoration: none; }
 form { display: grid; gap: 12px; max-width: 420px; }
 input, button {
-  padding: 10px 12px;
+  padding: 17px 15px;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.15);
   background: rgba(0,0,0,.25);
@@ -212,8 +211,8 @@ body.login-page .login-container {
 }
 
 .logo-image {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   border-radius: 50%;
 }
@@ -235,27 +234,27 @@ body.login-page .login-container {
 // Adjust spacing for signup page with many fields
 .signup-card {
   .login-logo {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   .logo-circle {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
   }
   
   .logo-image {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
   }
   
   .login-form {
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 30px;
   }
   
   .login-input {
-    padding: 12px 20px;
-    font-size: 14px;
+    padding: 12px 50px;
+    font-size: 20px;
   }
 }
 
@@ -445,8 +444,8 @@ body.login-page .login-container {
     }
     
     .logo-image {
-      width: 40px;
-      height: 40px;
+      width: 90px;
+      height: 90px;
     }
     
     .login-input {
@@ -461,8 +460,8 @@ body.login-page .login-container {
   }
   
   .logo-image {
-    width: 50px;
-    height: 50px;
+    width: 90px;
+    height: 90px;
   }
   
   .logo-text {
@@ -727,7 +726,7 @@ body.login-page .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 76px);
+  min-height: calc(50vh - 96px);
   background: transparent;
   padding: 40px 20px;
 }
@@ -736,10 +735,10 @@ body.login-page .login-container {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  padding: 40px;
+  padding: 90px;
   width: 100%;
-  max-width: 500px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  box-shadow: 0 8px 85px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   text-align: center;
 
@@ -753,7 +752,7 @@ body.login-page .login-container {
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 
   label {
     display: flex;
@@ -766,7 +765,7 @@ body.login-page .login-container {
     input {
       width: 100%;
       margin-top: 6px;
-      padding: 10px 14px;
+      padding: 20px 20px;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.15);
       background: rgba(0, 0, 0, 0.25);
@@ -788,17 +787,17 @@ body.login-page .login-container {
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin: 30px 0;
+  margin: 20px 0;
   padding: 0 20px;
 
   button {
-    padding: 12px 24px;
+    padding: 12px 4px;
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
-    min-width: 140px;
+    min-width: 260px;
     text-align: center;
   }
 
@@ -843,7 +842,7 @@ body.login-page .login-container {
 }
 
 .profile-message {
-  margin-top: 20px;
+  margin-top: 80px;
   padding: 12px;
   border-radius: 10px;
   background: rgba(46, 91, 255, 0.1);
@@ -867,6 +866,7 @@ body.login-page .login-container {
     padding: 20px;
   }
 }
+
 
 .pexels-header {
   text-align: center;
@@ -1041,7 +1041,7 @@ body.login-page .login-container {
 }
 
 .simple-heart {
-  background: transparent;
+  
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
@@ -1666,7 +1666,7 @@ body.login-page .login-container {
     }
     
     .nav-item {
-      flex: 0 0 auto;
+      flex: 0 0 ;
       margin-bottom: 0;
     }
   }
@@ -3392,7 +3392,6 @@ body.login-page .login-container {
           font-size: 0.9rem;
           margin-right: 0.5rem;
         }
-        
         .text {
           color: #ffffff;
         }
@@ -3857,17 +3856,6 @@ body.login-page .login-container {
     
     // Animation for subtitle appearance
     animation: subtitleFadeIn 0.2s ease-in-out;
-    
-    @keyframes subtitleFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
   }
   
   .subtitle-progress {
@@ -3886,6 +3874,12 @@ body.login-page .login-container {
       }
     }
   }
+}
+
+/* ANIMACIÓN MOVIDA FUERA DEL SELECTOR (válida en CSS) */
+@keyframes subtitleFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 // Video player container positioning
@@ -4091,6 +4085,1648 @@ body.login-page .login-container {
   color: #1a1a1a;
 }
 
+/* ===================== SISTEMA RESPONSIVO DECENTE ===================== */
+/* Tokens mínimos para spacing fluidos sin pelear tu paleta */
+:root{
+  --sp-1: .25rem; --sp-2: .5rem; --sp-3: .75rem; --sp-4: 1rem; --sp-5: 1.25rem; --sp-6: 1.5rem; --sp-8: 2rem;
+  --pad-x: clamp(12px, 2.5vw, 28px); /* padding horizontal fluido */
+}
+
+/* 1) Base de página: sin desplazamiento lateral y con tipografía que escala */
+html, body { width:100%; overflow-x:hidden; }
+body{
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.section{ padding-block: clamp(16px, 4vw, 48px); }
+.stack-4 > * + *{ margin-top: var(--sp-4); }
+.stack-6 > * + *{ margin-top: var(--sp-6); }
+
+/* 3) Grillas responsivas reutilizables (no inventes 20 clases por página) */
+.grid-2{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--sp-6); }
+.grid-3{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--sp-6); }
+@media (max-width: 1024px){
+  .grid-3{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 860px){
+  .grid-2, .grid-3{ grid-template-columns: 1fr; gap: var(--sp-4); }
+}
+
+/* 4) Medios e imágenes que no rompen el layout */
+img, video, canvas{ max-width:100%; height:auto; display:block; }
+iframe{ max-width:100%; }
+
+header.nav .nav-inner{
+  display:flex; align-items:center; gap:12px; min-height:64px;
+}
+
+/* Logo a la izquierda, estable */
+header.nav .nav-logo{ justify-self: center; display:inline-flex; align-items:center; gap:.5rem; flex:0 0 auto; }
+
+/* Menú a la derecha SIEMPRE */
+header.nav .nav-items,
+header.nav .nav-right,
+header.nav .nav-right--public,
+header.nav .nav-right--authed{
+  margin-left:auto; flex:0 1 auto;
+}
+header.nav .nav-right,
+header.nav .nav-right--public,
+header.nav .nav-right--authed,
+header.nav .nav-actions,
+header.nav .nav-search{
+  grid-column: 3;
+  justify-self: end;
+}
+
+header.nav .nav-items ul,
+header.nav .nav-right ul,
+header.nav .nav-right--public ul,
+header.nav .nav-right--authed ul{
+  display:flex; align-items:center; gap: clamp(.25rem, 1vw, .75rem);
+  list-style:none; margin:0; padding:0; flex-wrap: wrap;
+}
+header.nav .nav-items li,
+header.nav .nav-right li,
+header.nav .nav-right--public li,
+header.nav .nav-right--authed li{ display:inline-flex; }
+
+/* Botones de menús móviles (solo se ven si tú los renderizas en JSX) */
+header.nav .hamb-btn,
+header.nav .hamburger-btn{
+  border:none; background:transparent; padding:6px; cursor:pointer;
+}
+
+/* Desktop limpio */
+@media (min-width: 861px){
+  header.nav .nav-items,
+  header.nav .nav-right,
+  header.nav .nav-right--public,
+  header.nav .nav-right--authed{ display:block !important; }
+  header.nav .nav-items ul,
+  header.nav .nav-right ul,
+  header.nav .nav-right--public ul,
+  header.nav .nav-right--authed ul{ flex-wrap: wrap; }
+  header.nav .mobile-menu,
+  header.nav .hamb-btn{ display:none !important; }
+}
+
+/* Móvil y tablet */
+@media (max-width: 860px){
+  /* Menú público: visible SIEMPRE, con wrap decente */
+  header.nav .nav-right--public,
+  header.nav .nav-items{ display:block !important; }
+  header.nav .nav-right--public ul,
+  header.nav .nav-items ul{ flex-wrap:wrap; row-gap:.25rem; }
+
+  /* Menú autenticado: colapsable (por defecto oculto, se muestra con .open) */
+  header.nav .nav-right--authed{ display:none; }
+  header.nav .nav-right--authed.open{ display:block; }
+  header.nav .nav-right--authed ul{
+    display:grid; grid-auto-rows:minmax(40px,auto); gap:.25rem;
+  }
+
+  /* Botón mobile visible solo si tú lo pintas en JSX */
+  header.nav .hamb-btn{ display:inline-flex !important; }
+}
+
+/* ===================== LAYOUT PRINCIPAL FULL-WIDTH ===================== */
+/* Si tienes páginas que se “encajonan” por un container global viejo,
+   usa esta clase en el main o el wrapper de esas páginas: */
+.page--fluid{ width:100%; max-width:100%; padding-inline: var(--pad-x); }
+
+/* Cartas/superficies con padding coherente en todos los tamaños */
+.surface, .card, .panel{ padding: clamp(12px, 2vw, 24px); border-radius: 12px; }
+
+/* ===================== RIELES/CARRUSEL (si los usas) ===================== */
+.rail{ position:relative; margin-block: var(--sp-8); }
+.rail-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--sp-4); margin-bottom: var(--sp-4); }
+.rail-track{
+  display:grid; grid-auto-flow:column; grid-auto-columns: minmax(220px, 1fr);
+  gap: 1rem; overflow-x:auto; scroll-snap-type: x mandatory; padding-bottom:.5rem;
+}
+.rail-card{ scroll-snap-align:start; border-radius:12px; overflow:hidden; }
 
 
+
+/* ===== Tokens reutilizables (seguros) ===== */
+:root{
+  --pad-x: clamp(12px, 2.5vw, 28px);
+  --nav-h: 64px; /* mantén 64 o ajusta según el alto real del header */
+}
+
+/* ===== Header: solo layout, sin cambiar tus colores ===== */
+.nav .nav-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--nav-h);
+  overflow: visible; /* no cortes extremos del menú */
+}
+
+/* Empuja el contenido exactamente lo que mide el header fijo */
+body{
+  padding-top: var(--nav-h) !important;
+}
+
+/* Menú a la derecha sin amputar textos */
+.nav-items,
+.nav-right,
+.nav-right--public,
+.nav-right--authed{
+  margin-left: auto;
+  flex: 0 1 auto;
+  min-width: 0; /* CLAVE para evitar recortes en flex */
+}
+.nav-items ul,
+.nav-right ul,
+.nav-right--public ul,
+.nav-right--authed ul{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0; padding: 0;
+  flex-wrap: wrap; /* en desktop no envuelve */
+  min-width: 0;
+}
+.nav-items li,
+.nav-right li,
+.nav-right--public li,
+.nav-right--authed li{
+  display: inline-flex;
+  min-width: 0;
+}
+.nav a,
+.nav button{
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;  /* evita cortar “Crea una cuenta” */
+  overflow: visible;
+}
+
+/* Cuando el viewport se estrecha, permite wrap bonito en el menú */
+@media (max-width: 1120px){
+  .nav-items ul,
+  .nav-right ul,
+  .nav-right--public ul,
+  .nav-right--authed ul{
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+}
+
+/* Anti-colapso del primer bloque bajo el header */
+main > :first-child,
+.page > :first-child,
+.hero-section:first-child{
+  margin-top: 0 !important;
+  padding-top: 4px;
+}
+
+/* ================== RESET RESPONSIVO BÁSICO (SEGURO) ================== */
+/* Requisitos: tu <head> debe tener:
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+*/
+
+/* 0) Helpers visibilidad móvil/desktop */
+.hidden-md { display: flex; }
+.show-md { display: none; }
+
+@media (max-width: 860px) {
+  .hidden-md { display: none !important; }
+  .show-md { display: inline-flex !important; }
+}
+
+/* 1) Header: menú público visible, authed colapsable, y wrap cuando toque */
+:root { --nav-h: 64px; }      /* ya lo usas para el padding-top del body */
+.nav .nav-inner { min-height: var(--nav-h); }
+
+/* Menú a la derecha, sin amputar textos */
+.nav-items,
+.nav-right,
+.nav-right--public,
+.nav-right--authed { margin-left: auto; flex: 0 1 auto; min-width: 0; }
+
+.nav-items ul,
+.nav-right ul,
+.nav-right--public ul,
+.nav-right--authed ul {
+  display: flex; align-items: center; gap: 8px;
+  list-style: none; margin: 0; padding: 0; flex-wrap: nowrap; min-width: 0;
+}
+
+.nav a, .nav button { white-space: nowrap; overflow: visible; }
+
+@media (max-width: 1120px) {
+  .nav-items ul,
+  .nav-right ul,
+  .nav-right--public ul,
+  .nav-right--authed ul { flex-wrap: wrap; row-gap: 4px; }
+}
+
+/* Estado móvil/tablet */
+@media (max-width: 860px) {
+  .nav-right--public,
+  .nav-items { display: block !important; }
+  .nav-right--public ul,
+  .nav-items ul { flex-wrap: wrap; row-gap: 4px; }
+
+  .nav-right--authed { display: none; }
+  .nav-right--authed.open { display: block; }
+  .nav-right--authed ul { display: grid; grid-auto-rows: minmax(40px, auto); gap: 6px; }
+
+  .nav .hamb-btn { display: inline-flex !important; }
+}
+
+/* 2) Contenedores fluidos en móvil sin tocar tu .container global de 980px */
+@media (max-width: 860px) {
+  .container { max-width: 100% !important; padding-inline: 16px; }
+}
+
+.container--fluid { width: 100%; max-width: 100%; padding-inline: clamp(12px, 2.5vw, 28px); }
+
+/* 3) Grillas clave */
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1024px) {
+  .videos-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+@media (max-width: 640px) {
+  .videos-grid { grid-template-columns: 1fr; gap: 14px; }
+  .video-thumbnail { height: 180px; }
+}
+
+/* 4) Menú móvil */
+.mobile-menu { border-top: 1px solid rgba(255,255,255,.1); background: #0b0f14; }
+.mobile-menu ul { list-style: none; margin: 0; padding: 8px 12px; display: grid; gap: 6px; }
+
+/* 5) Anti-colapso bajo header fijo */
+main > :first-child,
+.page > :first-child,
+.hero-section:first-child { margin-top: 0 !important; padding-top: 4px; }
+
+/* 🔒 Modo "ocultar menú público" */
+body.hide-public header.nav .nav-items,
+body.hide-public header.nav .mobile-menu,
+body.hide-public header.nav .hamb-btn,
+body.hide-public header.nav .nav-actions,
+body.hide-public header.nav .nav-right,
+body.hide-public header.nav .nav-right--public,
+body.hide-public header.nav .nav-right--authed,
+body.hide-public header.nav ul,
+body.hide-public header.nav li,
+body.hide-public header.nav a,
+body.hide-public header.nav button,
+body.hide-public header.nav .linklike {
+  display: none !important;
+}
+body.hide-public header.nav .nav-logo { display: inline-flex !important; }
+body.hide-public header.nav .hamburger-btn { display: inline-flex !important; }
+
+/* ====== Lumina · Rails tipo Netflix ====== */
+.rail-card .thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b1220;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
+}
+.rail-card .thumb img,
+.rail-card .thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.rail-card .thumb .thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 45%);
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+.rail-card:hover .thumb .thumb-overlay { opacity: 1; }
+.rail-card .thumb .play {
+  position: absolute;
+  left: 12px; bottom: 10px;
+  font-size: 18px;
+  line-height: 1;
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+.rail-card .thumb .duration {
+  position: absolute;
+  right: 10px; bottom: 10px;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.6);
+  color: #e5e7eb;
+}
+.rail-card .thumb .heart {
+  position: absolute;
+  right: 10px; top: 10px;
+  font-size: 16px;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+.rail-card .thumb .heart.liked { background: rgba(108,99,255,.8); }
+.rail-card .meta { margin-top: 8px; }
+.rail-card .meta .title {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ====== Rail horizontal sin barra visible ====== */
+.pexels-rails .rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(210px, 22vw);
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+.pexels-rails .rail-track::-webkit-scrollbar { display: none; }
+.pexels-rails .rail-track { -ms-overflow-style: none; scrollbar-width: none; }
+.pexels-rails .rail-card { scroll-snap-align: start; }
+
+.rail-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 8px 2px 10px;
+}
+.rail-title { font-size: 1.25rem; color: #e2e8f0; }
+.rail-controls { display: flex; gap: 8px; }
+.rail-btn {
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(17,24,39,.6);
+  color: #e2e8f0;
+  cursor: pointer;
+}
+.rail-btn:hover { background: rgba(108,99,255,.25); border-color: rgba(108,99,255,.55); }
+
+/* ====== Hero recortado a 21:9 y video cubriendo ====== */
+.pexels-hero {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 8px 0 18px;
+  background: #0b1220;
+}
+.pexels-hero .hero-media { position: relative; width: 100%; aspect-ratio: 21 / 9; }
+.pexels-hero .hero-video,
+.pexels-hero .hero-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.pexels-hero .hero-gradient {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,0) 45%),
+    radial-gradient(60% 60% at 15% 80%, rgba(108,99,255,.35), transparent 70%);
+  pointer-events: none;
+}
+.pexels-hero .hero-content {
+  position: absolute; left: 24px; bottom: 20px; right: 24px;
+  display: grid; gap: 8px;
+}
+.pexels-hero .hero-title { font-size: 2rem; color: #fff; }
+.pexels-hero .hero-meta { color: #e5e7eb; opacity: .9; }
+.pexels-hero .hero-actions { display: flex; gap: 10px; }
+.pexels-hero .hero-primary {
+  padding: 10px 16px; border-radius: 12px; border: 0;
+  background: #6c63ff; color: white; font-weight: 600; cursor: pointer;
+}
+.pexels-hero .hero-primary:hover { filter: brightness(1.05); }
+.pexels-hero .hero-secondary {
+  padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.35);
+  color: #e2e8f0; text-decoration: none; backdrop-filter: blur(4px);
+}
+
+/* ====== Pequeñas mejoras responsivas ====== */
+@media (max-width: 900px) {
+  .pexels-rails .rail-track { grid-auto-columns: minmax(200px, 60vw); }
+  .pexels-hero .hero-title { font-size: 1.5rem; }
+}
+@media (max-width: 640px) {
+  .pexels-rails .rail-track { grid-auto-columns: minmax(180px, 78vw); }
+}
+
+/* ====== Hero limpio (solo media) ====== */
+.pexels-hero { position: relative; border-radius: 18px; overflow: hidden; margin: 6px 0 16px; background: #0b1220; cursor: pointer; }
+.pexels-hero .hero-media { width: 100%; aspect-ratio: 21 / 9; }
+.pexels-hero .hero-video, .pexels-hero .hero-poster { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+
+/* Accesibilidad */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Buscador header */
+.search-form .search-input { width: 100%; }
+.search-form .search-input-group { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+
+/* ====== Rails ====== */
+.pexels-rails .rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(210px, 22vw);
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+.pexels-rails .rail-track::-webkit-scrollbar { display: none; }
+.pexels-rails .rail-track { -ms-overflow-style: none; scrollbar-width: none; }
+
+.rail-card .thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b1220;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
+}
+.rail-card .thumb img,
+.rail-card .thumb video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
+.rail-card .thumb .thumb-overlay { display: none; }
+.rail-card .meta { margin-top: 8px; }
+.rail-card .meta .title { font-size: .95rem; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 900px) { .pexels-rails .rail-track { grid-auto-columns: minmax(200px, 60vw); } }
+@media (max-width: 640px) { .pexels-rails .rail-track { grid-auto-columns: minmax(180px, 78vw); } }
+
+/* Hero “Netflix” (variante) */
+.pexels-hero { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 60vh; overflow: hidden; border-radius: 16px; }
+.hero-media { width: 100%; height: 100%; }
+.hero-video, .hero-poster { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Rail basico */
+.rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.rail-track::-webkit-scrollbar { display: none; }
+.rail-card .thumb { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; }
+.rail-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Hero limpio sin overlays */
+.pexels-hero { position: relative; margin-top: 1rem; }
+.hero-media { position: relative; border-radius: 16px; overflow: hidden; }
+.hero-video, .hero-poster { width: 100%; height: clamp(260px, 42vw, 520px); object-fit: cover; display:block; }
+.hero-gradient { position:absolute; inset:0; pointer-events:none; background: linear-gradient(180deg, rgba(15,23,42,0) 60%, rgba(15,23,42,.85) 100%); }
+
+/* Riel horizontal */
+.pexels-rails { margin-top: 1.5rem; }
+.rail-block + .rail-block { margin-top: 1.25rem; }
+.rail-head { display:flex; align-items:center; justify-content:space-between; margin: .25rem 0 .75rem; }
+.rail-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 600; }
+
+/* Track horizontal */
+.rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(180px, 22vw, 300px);
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+.rail-track::-webkit-scrollbar { height: 0; }
+
+.rail-card { scroll-snap-align: start; border-radius: 12px; overflow: hidden; background: #111827; }
+.thumb { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
+.thumb img, .thumb video { width:100%; height:100%; object-fit: cover; display:block; }
+.thumb-overlay {
+  position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:space-between;
+  padding:8px; background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.55));
+  opacity: 0; transition: opacity .25s ease;
+}
+.rail-card:hover .thumb-overlay { opacity: 1; }
+.play { font-size: 18px; }
+.duration { font-size: 12px; opacity: .9; }
+.heart { border: none; background: transparent; cursor: pointer; font-size: 18px; }
+.heart.liked { transform: scale(1.1); }
+
+/* === Rails responsivos, sin barra visible === */
+.pexels-rails { margin-top: 1.25rem; }
+.rail-block { margin-bottom: 1.25rem; }
+.rail-head { display:flex; align-items:center; justify-content:space-between; margin: .25rem 0 .5rem; }
+.rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(160px, 28vw, 320px);
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+.rail-track::-webkit-scrollbar { display: none; }
+.rail-track { -ms-overflow-style: none; scrollbar-width: none; }
+
+.rail-card { scroll-snap-align: start; border-radius: 12px; background: #111827; overflow: hidden; position: relative; }
+.rail-card .thumb { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; }
+.rail-card .thumb img, .rail-card .thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.thumb-overlay {
+  position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:space-between;
+  padding: 6px; opacity: 0; transition: opacity .2s ease;
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0) 40%, rgba(0,0,0,.35));
+}
+.rail-card:hover .thumb-overlay { opacity: 1; }
+.thumb-overlay .play { font-size: 18px; }
+.thumb-overlay .duration {
+  margin-left: auto; font-size: 12px; padding: 2px 6px;
+  background: rgba(0,0,0,.5); border-radius: 999px;
+}
+.thumb-overlay .heart {
+  position:absolute; right:6px; bottom:6px; background: rgba(0,0,0,.5);
+  border:0; border-radius: 999px; padding: 4px 8px; cursor: pointer;
+}
+.thumb-overlay .heart.liked { background: rgba(255, 111, 97, .75); }
+
+.meta { padding: 8px; }
+.meta .title {
+  font-size: .9rem; font-weight: 600; color: #e2e8f0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) { .rail-track { grid-auto-columns: clamp(180px, 24vw, 300px); } }
+@media (min-width: 1024px) { .rail-track { grid-auto-columns: clamp(200px, 20vw, 320px); } }
+
+.pexels-hero .hero-media,
+.pexels-hero .hero-video,
+.pexels-hero .hero-poster { width:100%; aspect-ratio: 21 / 9; object-fit: cover; }
+
+.nav-search { position: relative; }
+.nav-search-input {
+  width: min(30vw, 320px);
+  padding: .60rem 2.2rem .60rem .9rem;
+  border: 3px solid var(--border, #334155);
+  background: #0f172a; color:#e2e8f0; border-radius: 999px; outline: none;
+}
+.nav-search-clear {
+  position:absolute; right:6px; top:50%; transform: translateY(-50%);
+  width: 28px; height: 28px; border-radius: 999px;
+  border:0; background: #1e293b; color:#94a3b8; cursor:pointer;
+  line-height: 1; font-size: 18px;
+}
+.nav-search-clear:hover { background:#334155; color:#e2e8f0; }
+
+/* HERO limpio (sin overlays) */
+.pexels-hero { position: relative; margin-bottom: 1rem; }
+.pexels-hero .hero-media,
+.pexels-hero .hero-video,
+.pexels-hero .hero-poster {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* Barra superior de resultados */
+.search-results .sr-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: .25rem 0 .75rem;
+}
+.search-results .sr-back {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 1px solid #334155; background: #0f172a; color: #e2e8f0;
+  cursor: pointer; font-size: 18px; line-height: 1;
+}
+.search-results .sr-back:hover { background: #111827; }
+.search-results .sr-title { font-size: clamp(1rem, 2.4vw, 1.25rem); margin: 0; }
+
+/* (Ya tenías) Grid responsivo de resultados… */
+
+/* Favoritos visibles */
+.video-card, .rail-card { position: relative; }
+
+.rail-thumb { position: relative; border-radius: 12px; overflow: hidden; }
+.rail-heart {
+  position: absolute; top: 10px; right: 10px; z-index: 20 !important; font-size: 20px;
+  line-height: 1; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; padding: 6px 8px; cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease, background .15s ease;
+}
+.rail-heart:hover { transform: scale(1.08); }
+.rail-heart.liked { background: rgba(255, 111, 97, 0.7); }
+
+.rail-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: end; justify-content: space-between;
+  padding: 8px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
+  z-index: 10;
+  pointer-events: none;
+}
+.rail-overlay .rail-duration {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(0,0,0,.55);
+  color: #e2e8f0;
+}
+.rail-overlay .rail-play { font-size: 18px; opacity: .9; }
+
+.thumb-trigger { position: absolute; inset: 0; background: transparent; border: 0; z-index: 5; cursor: pointer; }
+.rail-card, .video-card { overflow: visible !important; }
+
+/* ==== Fix miniaturas sin franjas + título debajo ==== */
+.rail-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 1rem; }
+.video-card.rail-card {
+  background: transparent; border: 0; display: flex; flex-direction: column; gap: 0.5rem; min-width: 200px;
+}
+.thumb-trigger { all: unset; display: block; cursor: pointer; }
+.rail-thumb {
+  position: relative; aspect-ratio: 16/9; width: 100%; overflow: hidden; border-radius: 14px;
+  background: #0b1020; box-shadow: 0 6px 20px rgba(0,0,0,.2); outline: 1px solid rgba(255,255,255,0.06);
+}
+.rail-thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform .35s ease; }
+.rail-thumb:hover > img { transform: scale(1.03); }
+.rail-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 10%, rgba(0,0,0,0) 60%); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+.rail-thumb:hover .rail-overlay { opacity: 1; }
+.rail-play { position: absolute; left: 12px; bottom: 10px; font-size: 18px; line-height: 1; background: rgba(255,255,255,.15); backdrop-filter: blur(2px); padding: 6px 8px; border-radius: 8px; }
+.rail-badges { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; }
+.rail-duration { font-size: 12px; padding: 4px 6px; border-radius: 8px; background: rgba(0,0,0,.65); color: #fff; letter-spacing: .3px; }
+.rail-heart { position: absolute; top: 8px; right: 8px; height: 32px; width: 32px; border-radius: 50%; border: 0; display: grid; place-items: center; background: rgba(0,0,0,.45); color: #fff; cursor: pointer; transition: transform .15s ease, background .2s ease; }
+.rail-heart:hover { transform: scale(1.06); background: rgba(0,0,0,.6); }
+.rail-heart.liked { background: rgba(255, 111, 97, .85); }
+.rail-info { display: flex; align-items: start; justify-content: space-between; gap: .5rem; min-height: 2.5rem; }
+.rail-title {
+  font-size: .95rem; line-height: 1.25rem; color: #e2e8f0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; overflow: hidden;
+}
+@media (max-width: 640px) {
+  .rail-track { grid-auto-columns: minmax(160px, 1fr); gap: .75rem; }
+  .rail-title { font-size: .9rem; line-height: 1.2rem; }
+}
+
+/* Grid usado en resultados de búsqueda (si lo usas) */
+.videos-grid {
+  --min: 210px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min), 1fr));
+  gap: 1rem;
+}
+.videos-grid .video-card { background: transparent; border: 0; }
+.videos-grid .video-thumb-wrap,
+.videos-grid .video-thumb {
+  aspect-ratio: 16/9; width: 100%; border-radius: 14px; overflow: hidden; position: relative; background: #0b1020;
+}
+.videos-grid .video-thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
+.videos-grid .video-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 10%, rgba(0,0,0,0) 60%); opacity: 0; transition: opacity .25s ease; }
+.videos-grid .video-thumb-wrap:hover .video-overlay { opacity: 1; }
+.videos-grid .play-button { position: absolute; left: 12px; bottom: 10px; font-size: 18px; background: rgba(255,255,255,.15); backdrop-filter: blur(2px); padding: 6px 8px; border-radius: 8px; }
+.videos-grid .duration { position: absolute; right: 10px; bottom: 10px; font-size: 12px; padding: 4px 6px; border-radius: 8px; background: rgba(0,0,0,.65); color: #fff; }
+.videos-grid .video-bottom-bar { display: flex; align-items: start; justify-content: space-between; gap: .5rem; margin-top: .5rem; min-height: 2.5rem; }
+.videos-grid .video-title {
+  font-size: .95rem; line-height: 1.25rem; color: #e2e8f0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; overflow: hidden;
+}
+.videos-grid .simple-heart {
+  border: 0; background: rgba(0,0,0,.45); color: #fff; height: 32px; width: 32px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+}
+.videos-grid .simple-heart.liked { background: rgba(255, 111, 97, .85); }
+
+/* Hearts limpios */
+.simple-heart,
+.rail-card .heart {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  vertical-align: middle;
+  transform: translateZ(0);
+  transition: transform .15s ease;
+}
+.simple-heart:hover,
+.rail-card .heart:hover { transform: scale(1.08); }
+
+.video-thumb-wrap .video-overlay .simple-heart,
+.thumb .thumb-overlay .heart { position: absolute; right: 10px; bottom: 10px; }
+.video-card .video-bottom-bar .simple-heart { position: static; margin-left: 8px; }
+
+/* Hotfix de alineación */
+.video-card, .video-card * { box-sizing: border-box; }
+.video-card .thumb-trigger { all: unset; display: block; width: 100%; cursor: pointer; }
+.video-card .rail-thumb, .video-card figure.rail-thumb { margin: 0; padding: 0; width: 100%; }
+.video-card .rail-thumb > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.video-card.rail-card { padding: 0; width: 100%; }
+.video-card .rail-info { margin: 8px 0 0 0; padding: 0; width: 100%; }
+.video-card .rail-title { display: block; padding: 0; text-wrap: balance; }
+.rail-track { align-items: start; }
+.video-card .rail-thumb { border: 0; outline: none; box-shadow: 0 6px 20px rgba(0,0,0,.2); border-radius: 14px; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1020; }
+.video-card .rail-thumb > img { transform-origin: center center; }
+.videos-grid .video-card { padding: 0; width: 100%; }
+.videos-grid .video-thumb-wrap { margin: 0; padding: 0; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 14px; background: #0b1020; }
+.rail-card, .video-card { padding-inline: 0 !important; }
+
+/* Corazones sin círculo */
+.videos-grid .simple-heart,
+.video-card .simple-heart,
+.rail-card .heart,
+.rail-heart,
+.thumb .thumb-overlay .heart,
+.video-thumb-wrap .video-overlay .simple-heart {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+
+  display: inline-block !important;
+  line-height: 1 !important;
+  font-size: 20px !important;
+  cursor: pointer !important;
+  transform: translateZ(0);
+  transition: transform .15s ease;
+}
+.videos-grid .simple-heart:hover,
+.video-card .simple-heart:hover,
+.rail-card .heart:hover,
+.rail-heart:hover { transform: scale(1.06); }
+.thumb .thumb-overlay, .video-thumb-wrap .video-overlay { position: absolute; inset: 0; pointer-events: none; }
+.thumb .thumb-overlay .heart, .video-thumb-wrap .video-overlay .simple-heart { position: absolute !important; top: 8px !important; right: 8px !important; pointer-events: auto !important; }
+.video-card .video-bottom-bar .simple-heart { position: static !important; margin-left: 8px !important; }
+.simple-heart.liked, .rail-card .heart.liked { filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); }
+
+/* ========= GRID RESPONSIVO MULTIFILA ========= */
+.videos-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  flex-wrap: wrap !important;
+}
+@media (min-width: 480px) { .videos-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; } }
+@media (min-width: 1024px) { .videos-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 18px !important; } }
+
+/* Miniaturas sin franja de color */
+.videos-grid .video-card { 
+  display: flex; flex-direction: column; min-width: 0;
+  background: rgba(30,41,59,.25);
+  border: 1px solid rgba(148,163,184,.12);
+  border-radius: 14px; overflow: hidden;
+  transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.videos-grid .video-thumb-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; background: transparent !important; }
+.videos-grid .video-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* === BUSQUEDA: grilla responsiva real === */
+.search-results .videos-grid{
+  display: grid !important;          /* corregido: grid, no flex */
+  /* flex-wrap: wrap;  (inefectivo con grid, lo dejamos para compat si compila) */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  grid-auto-rows: auto !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+  justify-content: flex-start;
+  justify-items: stretch !important;
+  overflow: auto !important;
+  white-space: normal !important;
+}
+
+/* Tarjeta consistente en búsqueda */
+.search-results .video-card{
+  flex: 0 1 clamp(220px, 24vw, 320px);
+  display: flex;
+  flex-direction: column;
+  min-width: 0 !important;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.06);
+  background: var(--panel, #1e293b);
+  overflow: hidden;
+}
+
+@media (max-width: 900px){
+  .pexels-rails .rail-track{
+    display:grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap:14px !important;
+    overflow:visible !important;
+    white-space:normal !important;
+  }
+  .pexels-rails .rail-card{ min-width:0 !important; }
+}
+
+.search-results .video-thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #0b1220;    /* sin franja azul */
+}
+.search-results .video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.search-results .rail-track { padding-block: 8px; }
+
+.search-results .search-grid{
+  display:grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap:16px !important;
+}
+.search-results .rail-thumb{ background:#000 !important; aspect-ratio:16/9; overflow:hidden; }
+.search-results .rail-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.search-results .rail-heart{ background:transparent !important; box-shadow:none !important; }
+
+/* ====== BUSQUEDA: grid vertical ====== */
+.search-results {
+  .rail-track, .rail-block, .rail, .rail-inner { display: initial !important; white-space: normal !important; overflow: visible !important; }
+
+  .search-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .video-card {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    border: 1px solid rgba(255,255,255,.06);
+    background: var(--panel, #1e293b);
+    overflow: hidden;
+  }
+
+  .video-thumb-wrap {
+    position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1220;
+  }
+  .video-thumb { width: 100%; height: 100%; display: block; object-fit: cover; }
+
+  .video-overlay { position: absolute; inset: 0; pointer-events: none; }
+  .play-button {
+    position: absolute; left: 10px; bottom: 10px; width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(0,0,0,.55); display: grid; place-items: center; font-weight: 700; line-height: 1;
+  }
+  .duration { position: absolute; right: 10px; bottom: 10px; padding: 2px 6px; font-size: 12px; border-radius: 6px; background: rgba(0,0,0,.55); }
+
+  .video-bottom-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px;
+  }
+  .info-left { min-width: 0; flex: 1 1 auto; }
+  .video-title { font-size: 14px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .info-right { display: flex; align-items: center; }
+  .simple-heart {
+    appearance: none; border: 0; background: transparent !important; box-shadow: none !important;
+    width: 28px; height: 28px; display: grid; place-items: center; font-size: 18px; cursor: pointer; transform: translateZ(0);
+  }
+  .simple-heart.liked { filter: drop-shadow(0 0 8px rgba(255,111,97,.65)); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .video-card:hover .video-thumb { transform: scale(1.02); transition: transform .25s ease; }
+  }
+
+  @media (max-width: 480px) { .search-grid { grid-template-columns: 1fr !important; } }
+  @media (min-width: 481px) and (max-width: 768px) { .search-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+  @media (min-width: 769px) and (max-width: 1024px) { .search-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+}
+
+/* ====== Asegura que SOLO la página de inicio use carrusel ====== */
+.pexels-rails .rail-track { display: flex; gap: 14px; overflow-x: auto; white-space: nowrap; }
+
+/* ====== BUSQUEDA: GRID RESPONSIVO REAL ====== */
+.search-results .search-grid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 16px !important;
+  align-items: start;
+  width: 100%;
+}
+.search-results .video-card{
+  flex: initial !important;
+  width: auto !important;
+  max-width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--panel, #1e293b);
+  box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.search-results .video-thumb-wrap{ position: relative; width: 100%; aspect-ratio: 16/9; background: #0b1220; overflow: hidden; }
+.search-results .video-thumb{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.search-results .video-bottom-bar{ display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; }
+.search-results .info-left{ min-width: 0; flex: 1 1 auto; }
+.search-results .video-title{ font-size: 14px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-results .simple-heart{ appearance: none; border: 0; background: transparent; box-shadow: none; width: 28px; height: 28px; display: grid; place-items: center; font-size: 18px; cursor: pointer; }
+.search-results .rail-track{ display: contents !important; white-space: normal !important; overflow: visible !important; }
+@media (max-width: 480px){ .search-results .search-grid{ grid-template-columns: 1fr !important; } }
+@media (min-width: 481px) and (max-width: 768px){ .search-results .search-grid{ grid-template-columns: repeat(2, 1fr) !important; } }
+@media (min-width: 769px) and (max-width: 1199px){ .search-results .search-grid{ grid-template-columns: repeat(3, 1fr) !important; } }
+@media (min-width: 1200px){ .search-results .search-grid{ grid-template-columns: repeat(4, 1fr) !important; } }
+
+.pexels-page .container{ max-width: min(1280px, 96vw) !important; }
+
+/* === Mostrar SIEMPRE el botón del menú en móviles/tablet === */
+/* Soporta tus dos nombres más comunes: .hamburger-btn y .hamb-btn */
+@media (max-width: 860px){
+  header.nav .hamburger-btn,
+  header.nav .hamb-btn{
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+
+    /* hit area decente sin cambiar tu estética */
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
+    /* por si algo lo tapa */
+    position: relative;
+    z-index: 1100;
+  }
+
+  /* el contenedor no debe recortarlo */
+  header.nav .nav-inner{ overflow: visible !important; }
+}
+
+/* Si activas el modo que esconde todo (hide-public), deja SOLO el botón visible */
+body.hide-public header.nav .hamburger-btn,
+body.hide-public header.nav .hamb-btn{
+  display: inline-flex !important;
+}
+
+/* Por si algún estilo inline o herencia lo fuerza a display:none */
+header.nav .hamburger-btn[style*="display:none"],
+header.nav .hamb-btn[style*="display:none"]{
+  display: inline-flex !important;
+}
+
+/* === Mostrar SIEMPRE el botón del menú en móviles, sin mover layout === */
+@media (max-width: 860px){
+  /* 1) No clippees el botón dentro del header */
+  header.nav .nav-inner{ overflow: visible !important; }
+
+  /* 2) Fuerza visibilidad del botón (cubre nombres típicos y fallback por aria-label) */
+  header.nav :is(.hamburger-btn, .hamb-btn, button[aria-label*="menú" i]){
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+
+    /* área de toque decente sin romper nada */
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    align-items: center;
+    justify-content: center;
+
+    /* que no quede detrás de nada raro */
+    position: relative;
+    z-index: 1200;
+  }
+
+  /* 3) Por si alguien lo escondió con utilidades o inline styles */
+  header.nav :is(.hamburger-btn, .hamb-btn, button[aria-label*="menú" i])[style*="display:none"]{
+    display: inline-flex !important;
+  }
+
+  /* 4) Modo “hide-public”: deja SOLO el botón y el logo visibles */
+  body.hide-public header.nav .nav-logo{ display: inline-flex !important; }
+  body.hide-public header.nav :is(.hamburger-btn, .hamb-btn, button[aria-label*="menú" i]){
+    display: inline-flex !important;
+  }
+}
+
+/* Asegura contraste del ícono en dark sin tocar tu paleta */
+header.nav :is(.hamburger-btn, .hamb-btn, button[aria-label*="menú" i]) svg{
+  color: #e2e8f0; fill: currentColor;
+}
+.nav-logo{
+  display: inline-flex;
+  align-items: center; 
+}
+
+.nav-logo-image{
+  width: 4em;
+  height: 5em;
+  object-fit: contain;
+}
+
+/* === Forzar la barra de búsqueda a la derecha del todo === */
+/* Funciona tanto si tu header usa flex como grid */
+
+header.nav .nav-search{
+  margin-left: auto !important;     /* en layouts flex empuja a la derecha */
+  display: flex;
+  justify-content: flex-end;         /* alinea su contenido a la derecha */
+  align-items: center;
+}
+
+/* Si tu header está en grid (como te dejé antes), garantizamos la columna derecha */
+header.nav .nav-inner{
+  grid-template-columns: auto 1fr auto;  /* izq | centro | der */
+}
+header.nav .nav-search{
+  grid-column: 3;                 /* col de la derecha */
+  justify-self: end;              /* pegado al borde derecho */
+}
+
+/* Un poco de control de ancho para que no se salga en móvil */
+header.nav .nav-search-input{
+  width: min(90vw, 360px);
+}
+
+/* Micro-ajuste de padding para que “pegue” mejor al borde en pantallas pequeñas */
+@media (max-width: 640px){
+  header.nav .nav-inner{ padding-right: 8px; }
+}
+
+/* === Lumina · Gradiente de marca (como tu logo) === */
+:root{
+  /* Stops tomados del logo: coral → fucsia → violeta */
+  --g1: #ff6f61;   /* coral */
+  --g2: #ff4ecd;   /* fucsia */
+  --g3: #6c63ff;   /* violeta */
+
+  --brand-grad: linear-gradient(135deg, var(--g1) 0%, var(--g2) 42%, var(--g3) 100%);
+  --brand-grad-hover: linear-gradient(135deg, var(--g1) 10%, var(--g2) 58%, var(--g3) 100%);
+
+  --on-brand: #ffffff;
+  --ring: 0 0 0 3px rgba(255, 110, 200, .35); /* glow amable en foco */
+}
+
+/* ===== Botón principal con gradiente ===== */
+.btn, .btn-primary{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.6rem 1rem; border-radius:14px; border:0; line-height:1; font-weight:700;
+  color: var(--on-brand);
+  background: var(--brand-grad);
+  background-size: 200% 200%;            /* para animar el hover */
+  box-shadow: 0 10px 28px rgba(108,99,255,.28);
+  transition: background-position .35s ease, transform .12s ease, box-shadow .25s ease;
+}
+.btn-primary:hover{ background: var(--brand-grad-hover); background-position: 100% 0; }
+.btn-primary:active{ transform: translateY(1px); }
+.btn-primary:focus-visible{ outline: none; box-shadow: var(--ring); }
+
+/* Tamaño compacto opcional */
+.btn-sm{ padding:.48rem .8rem; border-radius:12px; }
+
+/* ===== Variante contorno con borde degradado (sin hacks raros) ===== */
+.btn-outline{
+  position: relative; isolation:isolate;
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.58rem .98rem; border-radius:14px; color:#e2e8f0; background: #0f172a;
+}
+.btn-outline::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background: var(--brand-grad);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  z-index:-1;
+}
+.btn-outline:hover::before{ background: var(--brand-grad-hover); }
+.btn-outline:focus-visible{ outline:none; box-shadow: var(--ring); }
+
+/* ===== Texto con gradiente (para “Lumina” al lado del triángulo) ===== */
+.logo-word{
+  background: var(--brand-grad);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  font-weight: 800;
+}
+
+/* ===== Icon buttons (flechitas, corazones) con acento de logo ===== */
+.icon-btn{
+  width:36px; height:36px; display:grid; place-items:center; border-radius:10px; border:0;
+  color:#fff; background: rgba(15,23,42,.75);
+}
+.icon-btn.primary{ background: var(--brand-grad); box-shadow: 0 6px 18px rgba(108,99,255,.35); }
+.icon-btn.primary:hover{ background: var(--brand-grad-hover); }
+
+/* ===== Borde focus accesible para inputs y la barra de búsqueda ===== */
+input[type="search"], .nav-search-input{
+  outline: none;
+  border:1px solid rgba(148,163,184,.3);
+}
+input[type="search"]:focus, .nav-search-input:focus{
+  border-color: transparent;
+  box-shadow: var(--ring);
+}
+
+/* ===== Si quieres el texto del logo con gradiente sin tocar la imagen ===== */
+/* En el header, aplica .logo-wrap al Link y .logo-word al span */
+.nav-logo.logo-wrap{
+  display:inline-flex; align-items:center; gap:.6rem;
+}
+.nav-logo.logo-wrap .nav-logo-image{ width:28px; height:auto; display:block; }
+.nav-logo.logo-wrap .logo-word{ font-size: clamp(1.05rem, 2.5vw, 1.35rem); }
+
+/* === Signup con la misma piel del Login === */
+
+/* 1) Inputs idénticos al login */
+/* Inputs de Signup: ancho tipo login (90px derecha) y texto a la IZQUIERDA */
+.signup-card .login-input {
+  width: 100%;
+  /* top right bottom left → derecha 90px, izquierda 20px */
+  padding: 15px 90px 15px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 16px;
+  background: rgba(20, 35, 45, 0.7);
+  color: #ffffff;
+  transition: all 0.1s ease;
+  box-sizing: border-box;
+
+  text-align: left !important; /* texto a la izquierda */
+}
+
+.signup-card .login-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: left !important; /* placeholder a la izquierda */
+}
+
+.signup-card .login-input:focus {
+  outline: none;
+  border-color: rgba(108, 99, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+  background: rgba(20, 35, 45, 0.9);
+}
+
+/* PasswordField: más espacio a la derecha para el “ojo” SIN perder el left */
+.signup-card .password-wrap .login-input {
+  /* base 90px + ~20px extra para el botón ojo */
+  padding-right: 110px !important;
+  padding-left: 20px !important;  /* se mantiene a la izquierda */
+  text-align: left !important;
+}
+.signup-card .password-wrap .login-input::placeholder {
+  text-align: left !important;
+}
+
+
+/* 2) Alineación limpia de grupos */
+.signup-card .input-group {
+  margin-bottom: 14px;
+}
+
+/* 3) PasswordField: asegura espacio para el ojo y hereda colores */
+.signup-card .password-wrap .login-input {
+  padding-right: 46px; /* sitio para el botón ojo */
+}
+.signup-card .eye-btn {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #e6e6e6;
+}
+.signup-card .eye-btn:hover {
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.32);
+}
+
+/* 4) Muestra los nombres arriba de cada campo SOLO en signup
+      (AJUSTADO: alineados a la DERECHA) */
+.signup-card label.sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  /* margin a la derecha para pegarlos al borde derecho del contenedor */
+  margin: 0 2px 6px auto !important;
+  padding: 0 !important;
+  clip: auto !important;
+  white-space: normal !important;
+  border: 0 !important;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: right;                 /* ← clave: texto a la derecha */
+}
+
+/* 5) Botón principal centrado y “más gordito” */
+.signup-card .login-form .actions,
+.signup-card .login-button-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signup-card .login-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-inline: auto;
+  min-height: 46px;
+  width: clamp(200px, 40vw, 320px);
+  border-radius: 12px;
+  border: 0;
+  font-weight: 700;
+  letter-spacing: .2px;
+  /* mismo gradiente del login */
+  background: linear-gradient(90deg, #ff6f61 0%, #f538a0 50%, #6c63ff 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
+}
+.signup-card .login-button:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 8px 22px rgba(0,0,0,.32);
+}
+.signup-card .login-button:active {
+  transform: translateY(1px);
+}
+
+/* 6) Coherencia de contenedor y espaciados */
+.login-container .signup-card .login-form {
+  display: grid;
+  gap: 12px;
+}
+.login-container .signup-card .login-links {
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* 7) Responsive: que nada se desborde en móviles */
+@media (max-width: 480px){
+  .signup-card .login-button { width: min(92%, 320px); }
+  .signup-card .login-input { font-size: 15px; }
+}
+
+/* Botón principal con el gradiente Lumina (login y signup) */
+.login-page .login-card .login-button,
+.login-container .signup-card .login-button {
+  background: linear-gradient(90deg, #ff6f61 0%, #f538a0 50%, #6c63ff 100%);
+  color: #fff;
+  border: 0;
+  
+}
+
+/* ====== Signup: ancho de la tarjeta + centrado bonito ====== */
+:root{
+  /* Ajusta este valor si la quieres aún más grande */
+  --signup-max: 920px; /* prueba 760–920px según tu gusto */
+}
+
+.login-container {
+  /* que no la estrangule ningún container viejo */
+  max-width: 100% !important;
+
+  /* centrado vertical y horizontal */
+  min-height: calc(100vh - var(--nav-h, 64px));
+  display: grid;
+  place-content: center;
+  padding: clamp(16px, 4vw, 40px);
+}
+
+/* Tu tarjeta de crear cuenta, más ancha y centrada */
+.login-card.signup-card {
+  width: min(190%, var(--signup-max));
+  margin: 0 auto;
+  /* más “aire” interno sin deformar */
+  padding: clamp(18px, 2.4vw, 34px) clamp(18px, 3vw, 42px);
+  box-sizing: border-box;
+}
+
+/* Asegura que nada se desborde dentro del card ancho */
+.login-card.signup-card .login-form {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  gap: 12px;
+}
+
+.login-card.signup-card .input-group,
+.login-card.signup-card .login-input,
+.login-card.signup-card .password-wrap,
+.login-card.signup-card .password-wrap .login-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botón centrado y con ancho cómodo (más “gordito”) */
+.login-card.signup-card .login-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px auto 0 auto;       /* centrado */
+  width: clamp(220px, 40%, 340px);/* más ancho pero sin estirarse infinito */
+  min-height: 46px;
+  border-radius: 12px;
+}
+
+/* En pantallas grandes, si quieres aún más ancho, súbelo un poco */
+@media (min-width: 1280px){
+  :root{ --signup-max: 900px; }   /* opcional: empújala un poquito más */
+}
+
+/* En móviles, que respire sin pegarse a los bordes */
+@media (max-width: 480px){
+  .login-card.signup-card {
+    border-radius: 14px;          /* se ve más “card” en cel */
+    padding: 16px 14px;           /* ajusta el padding lateral */
+  }
+  .login-card.signup-card .login-button {
+    width: min(92%, 340px);
+  }
+}
+
+
+/* === Signup ancho (horizontal) sin alargarlo (vertical) === */
+
+/* 1) Sube el ancho objetivo del card */
+:root{
+  --signup-max: 500px; /* prueba 980–1120px según tu gusto */
+}
+
+/* 2) El contenedor NO debe forzar un alto gigante */
+body.login-page .login-container{
+  /* quita el estiramiento vertical */
+  min-height: auto !important;
+  /* centrado vertical suave con margen, no con alto forzado */
+  display: block !important;
+  padding: clamp(16px, 3vw, 40px) !important;
+  margin: clamp(24px, 6vh, 64px) auto !important;
+  max-width: none !important;
+}
+
+/* 3) Asegura que el .container padre no limite el ancho */
+body.login-page .container{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-inline: clamp(16px, 3vw, 40px) !important;
+  box-sizing: border-box;
+}
+
+/* 4) La tarjeta de crear cuenta: más ANCHA y centrada */
+body.login-page .login-card.signup-card{
+  width: min(100%, var(--signup-max)) !important; /* ensancha */
+  max-width: var(--signup-max) !important;
+  margin-inline: auto !important;
+  /* mantén padding razonable para que no “parezca” larga */
+  padding: clamp(18px, 2.2vw, 36px) clamp(22px, 3vw, 48px) !important;
+  box-sizing: border-box !important;
+}
+
+/* 5) Nada dentro debe romper el ancho ni empujar alto extra */
+body.login-page .login-card.signup-card .login-form,
+body.login-page .login-card.signup-card .input-group,
+body.login-page .login-card.signup-card .login-input,
+body.login-page .login-card.signup-card .password-wrap{
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 6) Botón centrado y “gordito”, sin hacerlo kilométrico */
+body.login-page .login-card.signup-card .login-button{
+  display: inline-flex !important;
+  margin: 10px auto 0 !important;
+  width: clamp(220px, 42%, 360px) !important; /* ancho visual, no toda la fila */
+  min-height: 46px !important;
+  border-radius: 12px !important;
+}
+
+/* 7) En pantallas muy grandes, puedes abrirlo un poco más */
+@media (min-width: 1440px){
+  :root{ --signup-max: 1120px; }
+}
+
+/* === FIX: Login centrado; Signup sigue ancho === */
+
+/* 1) El contenedor del login se centra con grid (sin empujarlo a la derecha) */
+body.login-page .login-container{
+  display: grid !important;
+  place-content: center !important;     /* centra vertical y horizontal */
+  min-height: calc(100vh - var(--nav-h)) !important;
+  margin: 0 auto !important;
+  padding-inline: clamp(12px, 3vw, 32px) !important;
+  box-sizing: border-box;
+}
+
+/* 2) La tarjeta de LOGIN (no signup) queda centrada y con ancho controlado */
+body.login-page .login-card:not(.signup-card){
+  width: min(100%, 480px) !important;
+  margin: 0 auto !important;
+  float: none !important;
+}
+
+/* 3) Asegura que el “signup ancho” solo afecte al signup */
+body.login-page .login-card.signup-card{
+  /* estas reglas ya las tienes para hacerlo ancho;
+     las dejamos como están, solo nos aseguramos de que el login no las herede */
+  width: var(--signup-max, 1040px) !important;
+  max-width: var(--signup-max, 1040px) !important;
+  margin-inline: auto !important;
+}
+
+/* 4) Evita corrimiento por padding/desbordes globales */
+html, body{
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* 5) Contenedor genérico sin sesgo a la derecha en la vista de login */
+body.login-page .container{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: clamp(12px, 3vw, 32px) !important;
+  padding-right: clamp(12px, 3vw, 32px) !important; /* simétrico */
+  box-sizing: border-box;
+}
+
+/* ===== Botones "Mi perfil" con colores Lumina ===== */
+:root{
+  --lumina-grad: linear-gradient(90deg, #ff6f61 0%, #f538a0 50%, #6c63ff 100%);
+}
+
+/* Alcances típicos de la página de perfil: ajusta si tu wrapper usa otro */
+.profile-page .btn,
+.page--profile .btn,
+.profile-card .btn,
+.my-profile .btn,
+.profile-actions .btn,
+.profile-page button,
+.profile-page a[role="button"]{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 10px 16px;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 0;
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: #fff !important;
+  background: var(--lumina-grad) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
+  text-decoration: none;
+}
+
+.profile-page .btn:hover,
+.page--profile .btn:hover,
+.profile-card .btn:hover,
+.my-profile .btn:hover,
+.profile-actions .btn:hover,
+.profile-page button:hover,
+.profile-page a[role="button"]:hover{
+  filter: brightness(1.06);
+  box-shadow: 0 8px 22px rgba(0,0,0,.32);
+}
+
+.profile-page .btn:active,
+.page--profile .btn:active,
+.profile-card .btn:active,
+.my-profile .btn:active,
+.profile-actions .btn:active{
+  transform: translateY(1px);
+}
+
+/* Estado foco accesible */
+.profile-page .btn:focus-visible{
+  outline: 0;
+  box-shadow:
+    0 0 0 3px rgba(108,99,255,.35),
+    0 8px 22px rgba(0,0,0,.32);
+}
+
+/* Desactivado */
+.profile-page .btn[disabled],
+.profile-page .btn:disabled{
+  opacity: .55;
+  filter: saturate(.7);
+  cursor: not-allowed;
+}
+
+/* Variantes útiles (opcional):
+   - Secundario oscuro para acciones menos importantes
+   - Contorno con borde degradado  */
+.profile-page .btn-secondary{
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.profile-page .btn-outline{
+  position: relative;
+  color: #e2e8f0 !important;
+  background: transparent !important;
+  border: 2px solid transparent !important;
+  border-radius: 12px;
+  /* borde degradado */
+  background-image: var(--lumina-grad), linear-gradient(#0f172a, #0f172a);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.profile-page .btn-outline:hover{ filter: brightness(1.06); }
+
+/* ===== Ojo del PasswordField: blindado ===== */
+.password-wrap { position: relative; }
+.password-wrap .login-input { padding-right: 46px; }
+
+.eye-btn{
+  --hit: 36px;
+  position:absolute; top:50%; right:8px; transform:translateY(-50%);
+  width:var(--hit); height:var(--hit); min-width:var(--hit); min-height:var(--hit);
+  display:inline-flex; align-items:center; justify-content:center; gap:0;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .06s ease;
+  /* anula locuras globales */
+  filter:none !important; mix-blend-mode: normal !important;
+}
+
+.eye-btn:hover{
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.32);
+}
+.eye-btn:active{ transform: translateY(-50%) scale(.98); }
+
+/* SVG siempre visible y con tamaño fijo */
+.eye-btn .icon-eye{
+  width: 18px; height: 18px; display: block; flex:0 0 18px;
+  /* Aplasta resets hostiles */
+  stroke: none !important;
+  fill: #e6e6e6 !important;
+  filter:none !important;
+}
+
+/* Estado: por defecto ojo abierto; cuando .is-on, se muestra el tachado */
+.eye-btn .icon-eye.off{ display:none; }
+.eye-btn.is-on .icon-eye.open{ display:none; }
+.eye-btn.is-on .icon-eye.off{ display:block; }
+
+@media (max-width: 640px){
+  .eye-btn{ right:6px; --hit:34px; }
+  .password-wrap .login-input{ padding-right:48px; }
+}
+
+/* Si en algún lado metiste un svg global que lo oculta, lo desactivamos aquí */
+.eye-btn svg *{
+  fill: #e6e6e6 !important;
+  stroke: #e6e6e6 !important;
+}
 

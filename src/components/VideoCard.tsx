@@ -27,6 +27,7 @@ export default function VideoCard({
   isFav: boolean;
 }) {
   const duration = formatDuration(video.duration);
+
   return (
     <article className="video-card rail-card">
       <button
@@ -35,32 +36,40 @@ export default function VideoCard({
         onClick={(e) => onPlay(video, e.currentTarget)}
         aria-label={`Reproducir video por ${video.user.name}, duración ${duration}`}
       >
-        <div className="rail-thumb">
+        <figure className="rail-thumb" aria-label={`Miniatura del video por ${video.user.name}`}>
+          {/* El contenedor mantiene 16:9 y recorta la imagen para evitar franjas */}
           <img
             src={video.image}
             alt={`Miniatura del video por ${video.user.name}`}
             loading="lazy"
           />
-          <span className="rail-duration" aria-hidden="true">{duration}</span>
+
+          <div className="rail-badges" aria-hidden="true">
+            <span className="rail-duration">{duration}</span>
+          </div>
+
           <div className="rail-overlay" aria-hidden="true">
             <div className="rail-play">▶</div>
           </div>
-        </div>
+
+          {/* Corazón arriba-derecha dentro del thumb */}
+          <button
+            type="button"
+            className={`rail-heart ${isFav ? "liked" : ""}`}
+            aria-pressed={isFav}
+            aria-label={isFav ? "Quitar de favoritos" : "Agregar a favoritos"}
+            onClick={(e) => onToggleFav(video.id, e)}
+          >
+            {isFav ? "❤️" : "🤍"}
+          </button>
+        </figure>
       </button>
 
+      {/* Título DEBAJO, bonito y truncado a 2 líneas */}
       <div className="rail-info">
         <div className="rail-title" title={`Video por ${video.user.name}`}>
           Video por {video.user.name}
         </div>
-        <button
-          type="button"
-          className={`rail-heart ${isFav ? "liked" : ""}`}
-          aria-pressed={isFav}
-          aria-label={isFav ? "Quitar de favoritos" : "Agregar a favoritos"}
-          onClick={(e) => onToggleFav(video.id, e)}
-        >
-          {isFav ? "❤️" : "🤍"}
-        </button>
       </div>
     </article>
   );
